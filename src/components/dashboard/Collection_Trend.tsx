@@ -18,7 +18,7 @@ const Collection_Trend = () => {
   ];
 
   return (
-    <div className="bg-[#FAFAFA] rounded-[18px] p-6 mt-4 ml-4">
+    <div className="bg-[#FAFAFA] rounded-[18px] border-[0.4px] border-[#1A1A1A80] p-6 mt-4 ml-4">
       <Typography fontSize={26} fontWeight={400} color="#1A1A1A">
         Monthly Collection Trend
       </Typography>

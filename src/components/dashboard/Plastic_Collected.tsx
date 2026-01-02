@@ -20,7 +20,7 @@ const Plastic_Collected = () => {
       </div>
 
       <div>
-        <Typography fontSize={24} fontWeight={300} color="#00C281">
+        <Typography fontSize={15} fontWeight={300} color="#00C281">
           8% vs last month
         </Typography>
       </div>
