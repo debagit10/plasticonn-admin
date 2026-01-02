@@ -3,7 +3,7 @@ import { LuUsersRound } from "react-icons/lu";
 
 const Total_Users = () => {
   return (
-    <div className="rounded-[18px] shadow-[#1A1A1A26] bg-[#FAFAFA] py-8 px-8.5 flex flex-col gap-6.5 w-75">
+    <div className="rounded-[18px] shadow-[#1A1A1A26] bg-[#FAFAFA] py-8 px-8.5 flex flex-col gap-2 w-75">
       <div className="flex justify-between">
         <Typography fontSize={20} fontWeight={300} color="#1A1A1A">
           Total Users

@@ -13,11 +13,11 @@ interface PagesProps {
 const Pages: React.FC<PagesProps> = ({ children, page, helperText }) => {
   return (
     <div className="flex h-screen">
-      <div className="w-87">
+      <div className="w-80">
         <Sidebar />
       </div>
 
-      <div className="w-full bg-linear-to-br from-[#DFFFF6] to-[#FAFAFA]">
+      <div className="bg-linear-to-br from-[#DFFFF6] to-[#FAFAFA]">
         <div className="px-5 py-4 flex justify-between ">
           <div>
             <Typography color="#1A1A1A" fontSize={24} fontWeight={400}>

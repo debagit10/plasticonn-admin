@@ -1,4 +1,5 @@
 import Active_Centers from "../components/dashboard/Active_Centers";
+import Collection_Trend from "../components/dashboard/Collection_Trend";
 import Growth_Rate from "../components/dashboard/Growth_Rate";
 import Plastic_Collected from "../components/dashboard/Plastic_Collected";
 import Total_Users from "../components/dashboard/Total_Users";
@@ -16,10 +17,16 @@ const Dashboard = () => {
       page="Dashboard"
       helperText="Welcome back! Here's what's happening today."
     >
-      <div className="flex px-5 gap-6.5 mt-8">
+      <div className="flex px-5 gap-6.5 mt-6">
         {stats.map((stat) => (
           <div>{stat}</div>
         ))}
+      </div>
+
+      <div>
+        <div className="w-210">
+          <Collection_Trend />
+        </div>
       </div>
     </Pages>
   );
