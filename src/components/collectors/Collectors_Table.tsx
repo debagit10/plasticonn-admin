@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import React from "react";
 
+import { BsBan } from "react-icons/bs";
+
 interface TableProps {
   search: string;
   filter: string;
@@ -217,7 +219,22 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
                 >
                   <TableCell sx={{ px: 4 }}>{row.name}</TableCell>
                   <TableCell sx={{ px: 4 }}>{row.email}</TableCell>
-                  <TableCell sx={{ px: 4 }}>{row.status}</TableCell>
+                  <TableCell sx={{ px: 4 }}>
+                    <Typography
+                      display="flex"
+                      sx={{ textTransform: "capitalize" }}
+                      color={row.status === "active" ? "#00C281" : "#E11D48"}
+                    >
+                      <span className="mr-3">
+                        {row.status === "active" ? (
+                          <img src="/active.png" alt="active" />
+                        ) : (
+                          <BsBan size={20} color="#E11D48" />
+                        )}
+                      </span>{" "}
+                      {row.status}
+                    </Typography>
+                  </TableCell>
                   <TableCell sx={{ px: 4 }}>{row.createdAt}</TableCell>
                   <TableCell sx={{ px: 4 }}>...</TableCell>
                 </TableRow>
