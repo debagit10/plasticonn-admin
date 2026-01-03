@@ -3,6 +3,8 @@ import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import Pages from "../container/Pages";
 import Centers_Table from "../components/centers/Centers_Table";
+import Add_Center from "../components/centers/Add_Center";
+import Upload_Centers from "../components/centers/Upload_Centers";
 
 const Centers = () => {
   const [value, setValue] = useState("all");
@@ -14,6 +16,11 @@ const Centers = () => {
       helperText="Manage collection and recycling centers."
     >
       <div className=" px-5 mt-6">
+        <div className="flex gap-2.5 justify-end mb-3">
+          <Upload_Centers />
+          <Add_Center />
+        </div>
+
         <div className="flex gap-2">
           <TextField
             value={search}
