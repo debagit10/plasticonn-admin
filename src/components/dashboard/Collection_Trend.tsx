@@ -1,7 +1,13 @@
 import { Typography } from "@mui/material";
 import { LineChart } from "@mui/x-charts/LineChart";
+import type React from "react";
 
-const Collection_Trend = () => {
+interface Graph {
+  width: number;
+  height: number;
+}
+
+const Collection_Trend: React.FC<Graph> = ({ width, height }) => {
   const months = [
     "Jan",
     "Feb",
@@ -44,8 +50,8 @@ const Collection_Trend = () => {
           },
         ]}
         grid={{ vertical: true, horizontal: true }}
-        height={328}
-        width={736}
+        height={height}
+        width={width}
       />
     </div>
   );

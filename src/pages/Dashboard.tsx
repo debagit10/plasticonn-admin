@@ -9,10 +9,11 @@ import Pages from "../container/Pages";
 const Dashboard = () => {
   const stats = [
     <Total_Users />,
-    <Plastic_Collected />,
+    <Plastic_Collected width={300} />,
     <Active_Centers />,
     <Growth_Rate />,
   ];
+
   return (
     <Pages
       page="Dashboard"
@@ -26,7 +27,7 @@ const Dashboard = () => {
 
       <div className="flex">
         <div className="w-210">
-          <Collection_Trend />
+          <Collection_Trend width={728} height={325} />
         </div>
 
         <div className="mt-4 ml-10 w-98">
