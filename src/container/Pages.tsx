@@ -17,7 +17,7 @@ const Pages: React.FC<PagesProps> = ({ children, page, helperText }) => {
         <Sidebar />
       </div>
 
-      <div className="bg-linear-to-br from-[#DFFFF6] to-[#FAFAFA]">
+      <div className="bg-linear-to-br from-[#DFFFF6] to-[#FAFAFA] w-full">
         <div className="px-5 py-4 flex justify-between ">
           <div>
             <Typography color="#1A1A1A" fontSize={24} fontWeight={400}>
