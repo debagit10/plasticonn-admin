@@ -8,11 +8,13 @@ const Collectors = React.lazy(() => import("./pages/Collectors"));
 const Notifications = React.lazy(() => import("./pages/Notifications"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Admins = React.lazy(() => import("./pages/Admins"));
+const SignIn = React.lazy(() => import("./pages/auth/SignIn"));
 
 function App() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<SignIn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/centers" element={<Centers />} />

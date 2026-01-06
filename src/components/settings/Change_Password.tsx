@@ -192,7 +192,7 @@ const Change_Password = () => {
                 width: "365px",
                 height: "48px",
                 padding: "12px",
-                borderRadius: 12,
+                borderRadius: "12px",
                 backgroundColor: "#00C281",
                 color: "white",
               }}
@@ -213,7 +213,7 @@ const Change_Password = () => {
                 width: "365px",
                 height: "48px",
                 padding: "12px",
-                borderRadius: 12,
+                borderRadius: "12px",
                 borderColor: "#1A1A1A80",
                 color: "#1A1A1A",
               }}
