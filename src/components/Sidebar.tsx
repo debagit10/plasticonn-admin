@@ -6,6 +6,7 @@ import { LuChartSpline } from "react-icons/lu";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { LuUsersRound } from "react-icons/lu";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 const Sidebar = () => {
   const sideMenuList = [
@@ -18,6 +19,7 @@ const Sidebar = () => {
       name: "Notifications",
       link: "/notifications",
     },
+    { icon: <MdOutlineAdminPanelSettings />, name: "Admins", link: "/admins" },
     { icon: <IoSettingsOutline />, name: "Settings", link: "/settings" },
   ];
 
@@ -40,7 +42,7 @@ const Sidebar = () => {
           return (
             <div
               onClick={() => navigate(menu.link)}
-              className={`w-50 rounded-xl h-11 ml-10 pl-3 mb-6 cursor-pointer flex items-center gap-3.5 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-[#00C2811A] ${
+              className={`w-50 rounded-xl h-11 ml-10 pl-3 mb-3 cursor-pointer flex items-center gap-3.5 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-[#00C2811A] ${
                 isActive ? "bg-[#00C2811A] scale-105 shadow-md" : ""
               }`}
             >

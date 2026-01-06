@@ -6,10 +6,7 @@ import { LuUserRound } from "react-icons/lu";
 
 const Settings = () => {
   return (
-    <Pages
-      page="Settings"
-      helperText="Manage admin settings and access controls."
-    >
+    <Pages page="Settings" helperText="">
       <div className="flex flex-col p-6 bg-[#FAFAFA] border-[0.4px] border-[#1A1A1A80] rounded-xl mx-5">
         <div className="flex gap-4 items-center">
           <LuUserRound size={26} color="#00C281" />

@@ -7,6 +7,7 @@ const Centers = React.lazy(() => import("./pages/Centers"));
 const Collectors = React.lazy(() => import("./pages/Collectors"));
 const Notifications = React.lazy(() => import("./pages/Notifications"));
 const Settings = React.lazy(() => import("./pages/Settings"));
+const Admins = React.lazy(() => import("./pages/Admins"));
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/collectors" element={<Collectors />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/admins" element={<Admins />} />
       </Routes>
     </>
   );
