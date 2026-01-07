@@ -1,8 +1,86 @@
-import { Button, Checkbox, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useToast } from "../../utils/useToast";
+import Toast from "../../utils/Toast";
+import { useState } from "react";
+import api from "../../utils/axiosInstance";
+import { VscEyeClosed } from "react-icons/vsc";
+import { VscEye } from "react-icons/vsc";
+import { useAuthStore } from "../../utils/useAuthStore";
+
+interface SignInDetails {
+  email: string;
+  password: string;
+}
 
 const SignIn = () => {
+  const [loading, setLoading] = useState(false);
+
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const { toast, showToast, closeToast } = useToast();
+
+  const [signindetails, setDetails] = useState<SignInDetails>({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setDetails((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const isFormDataComplete = () => {
+    return Object.values(signindetails).every((value) => value.trim() !== "");
+  };
+
+  const { setUser } = useAuthStore.getState();
+
+  const signin = async () => {
+    setLoading(true);
+    const formReady = isFormDataComplete();
+
+    if (!formReady) {
+      setLoading(false);
+      showToast("Please input all fields", "warning");
+      return;
+    }
+
+    try {
+      const response = await api.post("/api/admin/login", signindetails);
+
+      setLoading(false);
+
+      setUser(response.data.data.admin);
+
+      showToast("Sign in successful", "success", "/dashboard");
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message;
+      console.log(errMsg);
+
+      showToast(errMsg, "error");
+
+      if (errMsg) {
+        setLoading(false);
+      }
+    }
+  };
   return (
     <div className="flex justify-center bg-[#FAFAFA] pt-20 pb-15 h-full">
+      <Toast
+        open={toast.open}
+        message={toast.message}
+        severity={toast.severity}
+        onClose={closeToast}
+      />
+
       <div className="flex flex-col gap-5.25">
         <div className="flex flex-col gap-5.25">
           <div className="flex justify-center">
@@ -50,8 +128,9 @@ const SignIn = () => {
               Email
             </Typography>
             <TextField
-              //   value={search}
-              //   onChange={(e) => setSearch(e.target.value)
+              name="email"
+              value={signindetails.email}
+              onChange={handleChange}
               placeholder="Enter your email"
               variant="outlined"
               size="small"
@@ -88,8 +167,10 @@ const SignIn = () => {
               Password
             </Typography>
             <TextField
-              //   value={search}
-              //   onChange={(e) => setSearch(e.target.value)
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={signindetails.password}
+              onChange={handleChange}
               placeholder="Enter your password"
               variant="outlined"
               size="small"
@@ -118,6 +199,25 @@ const SignIn = () => {
                   fontSize: 14,
                 },
               }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {showPassword ? (
+                      <VscEye
+                        size={20}
+                        className="text-[#A0AAB2] cursor-pointer"
+                        onClick={() => setShowPassword(false)}
+                      />
+                    ) : (
+                      <VscEyeClosed
+                        size={20}
+                        className="text-[#A0AAB2] cursor-pointer"
+                        onClick={() => setShowPassword(true)}
+                      />
+                    )}
+                  </InputAdornment>
+                ),
+              }}
             />
           </div>
 
@@ -142,8 +242,9 @@ const SignIn = () => {
           </div>
 
           <Button
+            disabled={loading}
             fullWidth
-            //onClick={() => setOpen(false)}
+            onClick={signin}
             sx={{
               height: "48px",
               padding: "12px",

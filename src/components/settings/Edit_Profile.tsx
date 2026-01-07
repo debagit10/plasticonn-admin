@@ -8,9 +8,13 @@ import {
 import { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import Change_Photo from "./Change_Photo";
+import { useAuthStore } from "../../utils/useAuthStore";
 
 const Edit_Profile = () => {
   const [open, setOpen] = useState(false);
+
+  const { user } = useAuthStore.getState();
+
   return (
     <div>
       <Button
@@ -66,7 +70,7 @@ const Edit_Profile = () => {
               Full Name
             </Typography>
             <TextField
-              //   value={search}
+              value={user?.name}
               //   onChange={(e) => setSearch(e.target.value)
               variant="outlined"
               size="small"
@@ -105,7 +109,7 @@ const Edit_Profile = () => {
               Email Address
             </Typography>
             <TextField
-              //   value={search}
+              value={user?.email}
               //   onChange={(e) => setSearch(e.target.value)}
               variant="outlined"
               size="small"
@@ -144,7 +148,7 @@ const Edit_Profile = () => {
               Phone Number
             </Typography>
             <TextField
-              //   value={search}
+              value={user?.phone}
               //   onChange={(e) => setSearch(e.target.value)}
               variant="outlined"
               size="small"
@@ -184,7 +188,7 @@ const Edit_Profile = () => {
             </Typography>
             <TextField
               disabled
-              //   value={search}
+              value={user?.role || "admin"}
               //   onChange={(e) => setSearch(e.target.value)}
               placeholder="e.g Important Platform Update"
               variant="outlined"

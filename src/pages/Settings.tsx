@@ -3,8 +3,11 @@ import Pages from "../container/Pages";
 import Change_Password from "../components/settings/Change_Password";
 import Edit_Profile from "../components/settings/Edit_Profile";
 import { LuUserRound } from "react-icons/lu";
+import { useAuthStore } from "../utils/useAuthStore";
 
 const Settings = () => {
+  const { user } = useAuthStore.getState();
+
   return (
     <Pages page="Settings" helperText="">
       <div className="flex flex-col p-6 bg-[#FAFAFA] border-[0.4px] border-[#1A1A1A80] rounded-xl mx-5">
@@ -21,10 +24,10 @@ const Settings = () => {
           <div className=" flex flex-col gap-4.5">
             <div>
               <Typography color="#1A1A1A" fontWeight={400} fontSize={18}>
-                John Admin
+                {user?.name}
               </Typography>
               <Typography color="#1A1A1A99" fontWeight={400} fontSize={14}>
-                admin@plasticonn.com
+                {user?.email}
               </Typography>
             </div>
 

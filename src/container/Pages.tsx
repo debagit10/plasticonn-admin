@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Typography from "@mui/material/Typography";
 import { Avatar, Badge, Divider } from "@mui/material";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { useAuthStore } from "../utils/useAuthStore";
 
 interface PagesProps {
   children?: React.ReactNode;
@@ -11,6 +12,8 @@ interface PagesProps {
 }
 
 const Pages: React.FC<PagesProps> = ({ children, page, helperText }) => {
+  const { user } = useAuthStore.getState();
+
   return (
     <div className="flex h-screen">
       <div className="w-80">
@@ -44,10 +47,10 @@ const Pages: React.FC<PagesProps> = ({ children, page, helperText }) => {
             <div className="flex gap-3">
               <div className="">
                 <Typography color="#1A1A1A" fontSize={16} fontWeight={400}>
-                  Admin User
+                  {user?.name}
                 </Typography>
                 <Typography color="#1A1A1AB2" fontSize={12} fontWeight={400}>
-                  Super Admin
+                  {user?.role || "admin"}
                 </Typography>
               </div>
               <Avatar />
