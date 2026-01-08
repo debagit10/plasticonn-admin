@@ -8,10 +8,9 @@ import {
   TablePagination,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { BsBan } from "react-icons/bs";
-import api from "../../utils/axiosInstance";
 
 interface Centers {
   _id: string;
@@ -41,28 +40,12 @@ interface GPS {
 interface TableProps {
   search: string;
   filter: string;
+  centers: Centers[];
 }
 
-const Centers_Table: React.FC<TableProps> = ({ search, filter }) => {
+const Centers_Table: React.FC<TableProps> = ({ search, filter, centers }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
-
-  const [centers, setCenters] = useState<Centers[]>();
-
-  const centersList = async () => {
-    try {
-      const response = await api.get("/api/admin/center-mgt/list");
-
-      console.log(response.data.data);
-      setCenters(response.data.data.centers);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    centersList();
-  }, []);
 
   const head = ["Name", "Type", "Address", "Verified", "Status", "Actions"];
 

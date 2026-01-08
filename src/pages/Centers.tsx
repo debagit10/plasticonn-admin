@@ -1,14 +1,58 @@
 import { TextField, InputAdornment, MenuItem } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import Pages from "../container/Pages";
 import Centers_Table from "../components/centers/Centers_Table";
 //import Add_Center from "../components/centers/Add_Center";
 import Upload_Centers from "../components/centers/Upload_Centers";
 
+import api from "../utils/axiosInstance";
+
+interface Centers {
+  _id: string;
+  centerId: string;
+  address: string;
+  name: string;
+  email: string;
+  phone: string;
+  createdAt: string;
+  status: string;
+  capacity: string;
+  type: string;
+  materialsAccepted: [string];
+  contactEmail: string;
+  contactPerson: string;
+  contactPhone: string;
+  gps: { coordinates: GPS };
+  operatingHours: string;
+  verified: boolean;
+}
+
+interface GPS {
+  lon: number;
+  lat: number;
+}
+
 const Centers = () => {
   const [value, setValue] = useState("all");
   const [search, setSearch] = useState("");
+
+  const [centers, setCenters] = useState<Centers[]>([]);
+
+  const centersList = async () => {
+    try {
+      const response = await api.get("/api/admin/center-mgt/list");
+
+      console.log(response.data.data);
+      setCenters(response.data.data.centers);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    centersList();
+  }, []);
 
   return (
     <Pages
@@ -17,7 +61,7 @@ const Centers = () => {
     >
       <div className=" px-5 mt-6">
         <div className="flex gap-2.5 justify-end mb-3">
-          <Upload_Centers />
+          <Upload_Centers onSuccess={centersList} />
           {/* <Add_Center /> */}
         </div>
 
@@ -112,7 +156,7 @@ const Centers = () => {
           </TextField>
         </div>
 
-        <Centers_Table search={search} filter={value} />
+        <Centers_Table search={search} filter={value} centers={centers} />
       </div>
     </Pages>
   );

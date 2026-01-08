@@ -5,7 +5,7 @@ import { useToast } from "../../utils/useToast";
 import api from "../../utils/axiosInstance";
 import Toast from "../../utils/Toast";
 
-const Upload_Centers = () => {
+const Upload_Centers = ({ onSuccess }: { onSuccess: () => void }) => {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -71,6 +71,8 @@ const Upload_Centers = () => {
         setOpen(false);
 
         setLoading(false);
+
+        onSuccess();
       }
     } catch (error: any) {
       const errMsg = error?.response?.data?.message;
