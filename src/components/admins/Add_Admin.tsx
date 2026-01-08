@@ -9,11 +9,86 @@ import {
 import { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { RiUserAddLine } from "react-icons/ri";
+import { useToast } from "../../utils/useToast";
+import api from "../../utils/axiosInstance";
+import Toast from "../../utils/Toast";
 
-const Add_Admin = () => {
+interface AdminDetails {
+  name: string;
+  email: string;
+  role: string;
+}
+
+const Add_Admin = ({ onSuccess }: { onSuccess: () => void }) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const { toast, showToast, closeToast } = useToast();
+
+  const [adminDetails, setAdminDetails] = useState<AdminDetails>({
+    email: "",
+    name: "",
+    role: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setAdminDetails((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const isFormDataComplete = () => {
+    return Object.values(adminDetails).every((value) => value.trim() !== "");
+  };
+
+  const submit = async () => {
+    setLoading(true);
+    const formReady = isFormDataComplete();
+
+    if (!formReady) {
+      setLoading(false);
+      showToast("Please input all fields", "warning");
+      return;
+    }
+
+    try {
+      const response = await api.post("/api/admin/admin-mgt/add", adminDetails);
+
+      if (response.data.status === 201) {
+        setLoading(false);
+
+        console.log(response.data);
+
+        showToast(`${response.data.message}`, "success");
+
+        setOpen(false);
+
+        onSuccess();
+      }
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message;
+      console.log(errMsg);
+
+      showToast(errMsg, "error");
+
+      setLoading(false);
+
+      if (errMsg) {
+        setLoading(false);
+      }
+    }
+  };
+
   return (
     <div>
+      <Toast
+        open={toast.open}
+        message={toast.message}
+        severity={toast.severity}
+        onClose={closeToast}
+      />
+
       <Button
         startIcon={<RiUserAddLine />}
         onClick={() => setOpen(true)}
@@ -64,8 +139,9 @@ const Add_Admin = () => {
               Name
             </Typography>
             <TextField
-              //   value={search}
-              //   onChange={(e) => setSearch(e.target.value)
+              name="name"
+              value={adminDetails.name}
+              onChange={handleChange}
               variant="outlined"
               size="small"
               fullWidth
@@ -103,8 +179,9 @@ const Add_Admin = () => {
               Email
             </Typography>
             <TextField
-              //   value={search}
-              //   onChange={(e) => setSearch(e.target.value)}
+              name="email"
+              value={adminDetails.email}
+              onChange={handleChange}
               variant="outlined"
               size="small"
               fullWidth
@@ -143,8 +220,9 @@ const Add_Admin = () => {
             </Typography>
             <TextField
               select
-              //   value={search}
-              //   onChange={(e) => setSearch(e.target.value)}
+              name="role"
+              value={adminDetails.role}
+              onChange={handleChange}
               variant="outlined"
               size="small"
               fullWidth
@@ -175,8 +253,8 @@ const Add_Admin = () => {
                 },
               }}
             >
-              <MenuItem value="Super Admin">Super Admin</MenuItem>
-              <MenuItem value="Admin">Admin</MenuItem>
+              <MenuItem value="super admin">Super Admin</MenuItem>
+              <MenuItem value="admin">Admin</MenuItem>
             </TextField>
           </div>
 
@@ -195,6 +273,8 @@ const Add_Admin = () => {
 
           <div className="flex gap-4 mt-12">
             <Button
+              onClick={submit}
+              disabled={loading}
               sx={{
                 width: "365px",
                 height: "48px",

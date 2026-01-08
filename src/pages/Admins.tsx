@@ -10,11 +10,21 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsBan } from "react-icons/bs";
 import { IoSearchOutline } from "react-icons/io5";
 import Pages from "../container/Pages";
 import Add_Admin from "../components/admins/Add_Admin";
+import api from "../utils/axiosInstance";
+
+interface Admins {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  status: string;
+}
 
 const Admins = () => {
   const [search, setSearch] = useState("");
@@ -22,33 +32,50 @@ const Admins = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
-  const head = ["Name", "Email", "Role", "Last Login", "Status", "Actions"];
+  const [admins, setAdmins] = useState<Admins[]>([]);
 
-  const rows = [
-    {
-      name: "John Doe",
-      email: "johndoe@gmail.com",
-      role: "Super Admin",
-      status: "suspended",
-      last_login: "22, ogundola street",
-    },
-    {
-      name: "Jane Doe",
-      email: "janedoe@gmail.com",
-      role: "Admin",
-      status: "active",
-      last_login: "22, ogundola street",
-    },
-    {
-      name: "Job Doe",
-      email: "jondoe@gmail.com",
-      role: "Admin",
-      status: "active",
-      last_login: "22, ogundola street",
-    },
-  ];
+  const adminList = async () => {
+    try {
+      const response = await api.get("/api/admin/admin-mgt/list");
 
-  const filteredRows = rows.filter((row) => {
+      console.log(response.data.data);
+      setAdmins(response.data.data.admins);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    adminList();
+  }, []);
+
+  const head = ["Name", "Email", "Role", "Status", "Actions"];
+
+  // const rows = [
+  //   {
+  //     name: "John Doe",
+  //     email: "johndoe@gmail.com",
+  //     role: "Super Admin",
+  //     status: "suspended",
+  //     last_login: "22, ogundola street",
+  //   },
+  //   {
+  //     name: "Jane Doe",
+  //     email: "janedoe@gmail.com",
+  //     role: "Admin",
+  //     status: "active",
+  //     last_login: "22, ogundola street",
+  //   },
+  //   {
+  //     name: "Job Doe",
+  //     email: "jondoe@gmail.com",
+  //     role: "Admin",
+  //     status: "active",
+  //     last_login: "22, ogundola street",
+  //   },
+  // ];
+
+  const filteredRows = admins.filter((row) => {
     const matchesSearch =
       row.name.toLowerCase().includes(search.toLowerCase()) ||
       row.email.toLowerCase().includes(search.toLowerCase());
@@ -123,7 +150,7 @@ const Admins = () => {
           />
 
           <div className="flex justify-end">
-            <Add_Admin />
+            <Add_Admin onSuccess={adminList} />
           </div>
         </div>
 
@@ -171,7 +198,7 @@ const Admins = () => {
                 {paginatedRows.length ? (
                   paginatedRows.map((row) => (
                     <TableRow
-                      key={row.name}
+                      key={row._id}
                       sx={{
                         fontWeight: 400,
                         fontSize: 18,
@@ -203,15 +230,15 @@ const Admins = () => {
 
                       <TableCell sx={{ px: 4 }}>
                         <Typography sx={{ textTransform: "capitalize" }}>
-                          {row.role}
+                          {row.role || "admin"}
                         </Typography>
                       </TableCell>
 
-                      <TableCell sx={{ px: 4 }}>
+                      {/* <TableCell sx={{ px: 4 }}>
                         <Typography sx={{ textTransform: "capitalize" }}>
                           {row.last_login}
                         </Typography>
-                      </TableCell>
+                      </TableCell> */}
 
                       <TableCell sx={{ px: 4 }}>
                         <Typography

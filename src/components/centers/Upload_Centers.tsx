@@ -58,7 +58,6 @@ const Upload_Centers = ({ onSuccess }: { onSuccess: () => void }) => {
 
     try {
       const response = await api.post("/api/admin/center-mgt/add", formData);
-      console.log(response.data);
 
       if (response.data.status === 201) {
         showToast(
