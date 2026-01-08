@@ -6,7 +6,6 @@ interface Prop {
 }
 
 const Plastic_Collected: React.FC<Prop> = ({ width }) => {
-  console.log(width);
   return (
     <div
       style={{ width: `${width}px` }}

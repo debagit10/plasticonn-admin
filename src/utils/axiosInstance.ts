@@ -12,7 +12,7 @@ api.interceptors.request.use(
   (config) => {
     NProgress.start();
 
-    if (!config.headers["Content-Type"]) {
+    if (!(config.data instanceof FormData)) {
       config.headers["Content-Type"] = "application/json";
     }
 

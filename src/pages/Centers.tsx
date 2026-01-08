@@ -3,7 +3,7 @@ import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import Pages from "../container/Pages";
 import Centers_Table from "../components/centers/Centers_Table";
-import Add_Center from "../components/centers/Add_Center";
+//import Add_Center from "../components/centers/Add_Center";
 import Upload_Centers from "../components/centers/Upload_Centers";
 
 const Centers = () => {
@@ -18,7 +18,7 @@ const Centers = () => {
       <div className=" px-5 mt-6">
         <div className="flex gap-2.5 justify-end mb-3">
           <Upload_Centers />
-          <Add_Center />
+          {/* <Add_Center /> */}
         </div>
 
         <div className="flex gap-2">
@@ -105,7 +105,7 @@ const Centers = () => {
             <MenuItem value="Informal Collection Center">
               Informal Collection Center
             </MenuItem>
-            <MenuItem value="Formal Collection Center">
+            <MenuItem value="Formal Collection">
               Formal Collection Center
             </MenuItem>
             <MenuItem value="Recycling Center">Recycling Center</MenuItem>

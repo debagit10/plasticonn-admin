@@ -1,11 +1,18 @@
 import { Box, Button, Dialog, DialogContent, Typography } from "@mui/material";
 import { useRef, useState, type DragEvent } from "react";
 import { IoCloseOutline } from "react-icons/io5";
+import { useToast } from "../../utils/useToast";
+import api from "../../utils/axiosInstance";
+import Toast from "../../utils/Toast";
 
 const Upload_Centers = () => {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  const { toast, showToast, closeToast } = useToast();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,8 +42,58 @@ const Upload_Centers = () => {
     }
   };
 
+  console.log(file);
+
+  const upload = async () => {
+    setLoading(true);
+
+    if (!file) {
+      showToast("File is missing", "warning");
+      setLoading(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await api.post("/api/admin/center-mgt/add", formData);
+      console.log(response.data);
+
+      if (response.data.status === 201) {
+        showToast(
+          `${response.data.data.inserted} Centers Added Successfully`,
+          "success"
+        );
+
+        setFile(null);
+
+        setOpen(false);
+
+        setLoading(false);
+      }
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message;
+      console.log(errMsg);
+
+      showToast(errMsg, "error");
+      setLoading(false);
+
+      if (errMsg) {
+        setLoading(false);
+      }
+    }
+  };
+
   return (
     <div>
+      <Toast
+        open={toast.open}
+        message={toast.message}
+        severity={toast.severity}
+        onClose={closeToast}
+      />
+
       <Button
         onClick={() => setOpen(true)}
         variant="outlined"
@@ -145,6 +202,50 @@ const Upload_Centers = () => {
                 <span style={{ fontStyle: "oblique" }}>Required columns:</span>{" "}
                 name, type, category, location, capacity
               </Typography>
+            </div>
+
+            <div className="flex gap-4 mt-12">
+              <Button
+                disabled={loading}
+                onClick={upload}
+                sx={{
+                  width: "365px",
+                  height: "48px",
+                  padding: "12px",
+                  borderRadius: "12px",
+                  backgroundColor: "#00C281",
+                  color: "white",
+                }}
+              >
+                <Typography
+                  fontWeight={400}
+                  fontSize={16}
+                  sx={{ textTransform: "capitalize" }}
+                >
+                  {loading ? "Uploading..." : "Upload Centers"}
+                </Typography>
+              </Button>
+
+              <Button
+                onClick={() => setOpen(false)}
+                variant="outlined"
+                sx={{
+                  width: "365px",
+                  height: "48px",
+                  padding: "12px",
+                  borderRadius: "12px",
+                  borderColor: "#1A1A1A80",
+                  color: "#1A1A1A",
+                }}
+              >
+                <Typography
+                  fontWeight={400}
+                  fontSize={16}
+                  sx={{ textTransform: "capitalize" }}
+                >
+                  Cancel
+                </Typography>
+              </Button>
             </div>
           </div>
         </DialogContent>

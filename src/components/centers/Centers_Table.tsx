@@ -8,9 +8,35 @@ import {
   TablePagination,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { BsBan } from "react-icons/bs";
+import api from "../../utils/axiosInstance";
+
+interface Centers {
+  _id: string;
+  centerId: string;
+  address: string;
+  name: string;
+  email: string;
+  phone: string;
+  createdAt: string;
+  status: string;
+  capacity: string;
+  type: string;
+  materialsAccepted: [string];
+  contactEmail: string;
+  contactPerson: string;
+  contactPhone: string;
+  gps: { coordinates: GPS };
+  operatingHours: string;
+  verified: boolean;
+}
+
+interface GPS {
+  lon: number;
+  lat: number;
+}
 
 interface TableProps {
   search: string;
@@ -21,7 +47,24 @@ const Centers_Table: React.FC<TableProps> = ({ search, filter }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
 
-  const head = ["Name", "Type", "Location", "Verified", "Status", "Actions"];
+  const [centers, setCenters] = useState<Centers[]>();
+
+  const centersList = async () => {
+    try {
+      const response = await api.get("/api/admin/center-mgt/list");
+
+      console.log(response.data.data);
+      setCenters(response.data.data.centers);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    centersList();
+  }, []);
+
+  const head = ["Name", "Type", "Address", "Verified", "Status", "Actions"];
 
   const TYPE_STYLES: Record<string, { bg: string; color: string }> = {
     "Informal Collection Center": {
@@ -38,44 +81,18 @@ const Centers_Table: React.FC<TableProps> = ({ search, filter }) => {
     },
   };
 
-  const rows = [
-    {
-      name: "John Doe",
-      type: "Informal Collection Center",
-      verified: true,
-      location: "22, ogundola street",
-      status: "active",
-    },
-    {
-      name: "Jane Doe",
-      type: "Formal Collection Center",
-      verified: false,
-      location: "24, ogundola street",
-      status: "active",
-    },
-    {
-      name: "Job Doe",
-      type: "Recycling Center",
-      verified: true,
-      location: "24, ogundola street",
-      status: "suspended",
-    },
-  ];
-
-  const filteredRows = rows.filter((row) => {
+  const filteredRows = centers?.filter((center) => {
     const matchesSearch =
-      row.name.toLowerCase().includes(search.toLowerCase()) ||
-      row.location.toLowerCase().includes(search.toLowerCase());
+      center.name.toLowerCase().includes(search.toLowerCase()) ||
+      center.address.toLowerCase().includes(search.toLowerCase());
 
     const matchesFilter =
-      filter === "all" || row.status === filter || row.type === filter;
+      filter === "all" || center.status === filter || center.type === filter;
 
     return matchesSearch && matchesFilter;
   });
 
-  console.log(filter);
-
-  const paginatedRows = filteredRows.slice(
+  const paginatedRows = filteredRows?.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -95,7 +112,7 @@ const Centers_Table: React.FC<TableProps> = ({ search, filter }) => {
     <div className="mt-6">
       <TableContainer
         sx={{
-          maxHeight: 500,
+          maxHeight: 450,
           overflowY: "auto",
           borderRadius: "18px",
           borderWidth: "0.5px",
@@ -129,10 +146,10 @@ const Centers_Table: React.FC<TableProps> = ({ search, filter }) => {
           </TableHead>
 
           <TableBody>
-            {paginatedRows.length ? (
+            {paginatedRows?.length ? (
               paginatedRows.map((row) => (
                 <TableRow
-                  key={row.name}
+                  key={row._id}
                   sx={{
                     fontWeight: 400,
                     fontSize: 18,
@@ -140,7 +157,12 @@ const Centers_Table: React.FC<TableProps> = ({ search, filter }) => {
                     backgroundColor: "#FAFAFA",
                   }}
                 >
-                  <TableCell sx={{ px: 4 }}>{row.name}</TableCell>
+                  <TableCell sx={{ px: 4 }}>
+                    <Typography>
+                      {row.name.charAt(0).toUpperCase() +
+                        row.name.slice(1).toLowerCase()}
+                    </Typography>
+                  </TableCell>
 
                   <TableCell sx={{ px: 4 }}>
                     <Typography
@@ -162,8 +184,9 @@ const Centers_Table: React.FC<TableProps> = ({ search, filter }) => {
                   </TableCell>
 
                   <TableCell sx={{ px: 4 }}>
-                    <Typography sx={{ textTransform: "capitalize" }}>
-                      {row.location}
+                    <Typography>
+                      {row.address.charAt(0).toUpperCase() +
+                        row.address.slice(1).toLowerCase()}
                     </Typography>
                   </TableCell>
 
@@ -222,7 +245,7 @@ const Centers_Table: React.FC<TableProps> = ({ search, filter }) => {
       <TablePagination
         rowsPerPageOptions={[10, 25]}
         component="div"
-        count={filteredRows.length}
+        count={filteredRows?.length || 0}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
