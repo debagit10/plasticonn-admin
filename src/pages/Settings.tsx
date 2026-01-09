@@ -9,7 +9,7 @@ const Settings = () => {
   const { user } = useAuthStore.getState();
 
   return (
-    <Pages page="Settings" helperText="">
+    <Pages page="Settings" helperText="View and manage your profile">
       <div className="flex flex-col p-6 bg-[#FAFAFA] border-[0.4px] border-[#1A1A1A80] rounded-xl mx-5">
         <div className="flex gap-4 items-center">
           <LuUserRound size={26} color="#00C281" />

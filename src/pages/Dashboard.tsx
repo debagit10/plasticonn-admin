@@ -54,6 +54,7 @@ const Dashboard = () => {
   const components = [
     <Total_Users value={stats?.users} growth={stats.growth.users} />,
     <Plastic_Collected
+      showgrowth={true}
       width={300}
       value={stats?.dropOffs}
       growth={stats.growth.dropOffs}

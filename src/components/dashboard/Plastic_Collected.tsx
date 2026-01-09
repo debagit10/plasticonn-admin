@@ -4,10 +4,16 @@ import { FaBottleWater } from "react-icons/fa6";
 interface Prop {
   width: number;
   value: number | undefined;
-  growth: number | undefined;
+  growth?: number | undefined;
+  showgrowth: boolean;
 }
 
-const Plastic_Collected: React.FC<Prop> = ({ width, value, growth }) => {
+const Plastic_Collected: React.FC<Prop> = ({
+  width,
+  value,
+  growth,
+  showgrowth,
+}) => {
   return (
     <div
       style={{ width: `${width}px` }}
@@ -29,22 +35,24 @@ const Plastic_Collected: React.FC<Prop> = ({ width, value, growth }) => {
         </Typography>
       </div>
 
-      <div>
-        <Typography
-          fontSize={15}
-          fontWeight={300}
-          color={
-            growth && growth < 0
-              ? "#E11D48" // red
-              : growth && growth > 0
-              ? "#00C281" // green
-              : "#1A1A1A" // neutral
-          }
-        >
-          {`${growth}% vs last month`}
-          {/* 8% vs last month */}
-        </Typography>
-      </div>
+      {showgrowth && (
+        <div>
+          <Typography
+            fontSize={15}
+            fontWeight={300}
+            color={
+              growth && growth < 0
+                ? "#E11D48" // red
+                : growth && growth > 0
+                ? "#00C281" // green
+                : "#1A1A1A" // neutral
+            }
+          >
+            {`${growth}% vs last month`}
+            {/* 8% vs last month */}
+          </Typography>
+        </div>
+      )}
     </div>
   );
 };

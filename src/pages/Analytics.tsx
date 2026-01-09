@@ -4,12 +4,40 @@ import Emissions from "../components/analytics/Emissions";
 import Collection_Trend from "../components/dashboard/Collection_Trend";
 import Plastic_Collected from "../components/dashboard/Plastic_Collected";
 import Pages from "../container/Pages";
+import { useEffect, useState } from "react";
+import api from "../utils/axiosInstance";
+
+interface Stats {
+  co2Saved: number;
+  efficiency: number;
+  totalPlastic: number;
+}
 
 const Analytics = () => {
-  const stats = [
-    <Plastic_Collected width={407} />,
-    <Center_Efficiency />,
-    <Emissions />,
+  const [stats, setStats] = useState<Stats>();
+  const getStats = async () => {
+    try {
+      const response = await api.get("/api/admin/dashboard/analytics");
+
+      console.log(response.data.data);
+      setStats(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getStats();
+  }, []);
+
+  const components = [
+    <Plastic_Collected
+      width={407}
+      value={stats?.totalPlastic}
+      showgrowth={false}
+    />,
+    <Center_Efficiency value={stats?.efficiency} />,
+    <Emissions value={stats?.co2Saved} />,
   ];
 
   return (
@@ -45,7 +73,7 @@ const Analytics = () => {
       </div>
 
       <div className="flex px-5 gap-6.5 mt-6">
-        {stats.map((stat) => (
+        {components.map((stat) => (
           <div>{stat}</div>
         ))}
       </div>
