@@ -9,14 +9,68 @@ import { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import Change_Photo from "./Change_Photo";
 import { useAuthStore } from "../../utils/useAuthStore";
+import { useToast } from "../../utils/useToast";
+import api from "../../utils/axiosInstance";
+import Toast from "../../utils/Toast";
 
 const Edit_Profile = () => {
   const [open, setOpen] = useState(false);
 
-  const { user } = useAuthStore.getState();
+  const [loading, setLoading] = useState(false);
+
+  const { user, setUser } = useAuthStore.getState();
+
+  const [update, setUpdate] = useState({
+    name: user?.name,
+    email: user?.email,
+    phone: user?.phone,
+  });
+
+  const { toast, showToast, closeToast } = useToast();
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setUpdate((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const submit = async () => {
+    setLoading(true);
+
+    try {
+      const response = await api.put("/api/admin/profile", update);
+
+      setLoading(false);
+
+      setUser(response.data.data.admin);
+
+      showToast(
+        "Profile updated. Login for changes to reflect",
+        "success",
+        "/"
+      );
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message;
+      console.log(errMsg);
+
+      showToast(errMsg, "error");
+
+      if (errMsg) {
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <div>
+      <Toast
+        open={toast.open}
+        message={toast.message}
+        severity={toast.severity}
+        onClose={closeToast}
+      />
+
       <Button
         onClick={() => setOpen(true)}
         sx={{
@@ -54,7 +108,14 @@ const Edit_Profile = () => {
             </Typography>
 
             <IoCloseOutline
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);
+                setUpdate({
+                  name: user?.name,
+                  email: user?.email,
+                  phone: user?.phone,
+                });
+              }}
               size={20}
               color="#1A1A1A"
               style={{ cursor: "pointer" }}
@@ -70,8 +131,9 @@ const Edit_Profile = () => {
               Full Name
             </Typography>
             <TextField
-              value={user?.name}
-              //   onChange={(e) => setSearch(e.target.value)
+              name="name"
+              value={update.name}
+              onChange={handleChange}
               variant="outlined"
               size="small"
               fullWidth
@@ -109,8 +171,9 @@ const Edit_Profile = () => {
               Email Address
             </Typography>
             <TextField
-              value={user?.email}
-              //   onChange={(e) => setSearch(e.target.value)}
+              name="email"
+              value={update.email}
+              onChange={handleChange}
               variant="outlined"
               size="small"
               fullWidth
@@ -148,8 +211,9 @@ const Edit_Profile = () => {
               Phone Number
             </Typography>
             <TextField
-              value={user?.phone}
-              //   onChange={(e) => setSearch(e.target.value)}
+              name="phone"
+              value={update.phone}
+              onChange={handleChange}
               variant="outlined"
               size="small"
               fullWidth
@@ -225,6 +289,8 @@ const Edit_Profile = () => {
 
           <div className="flex gap-4 mt-12">
             <Button
+              disabled={loading}
+              onClick={submit}
               sx={{
                 width: "365px",
                 height: "48px",
@@ -239,12 +305,19 @@ const Edit_Profile = () => {
                 fontSize={16}
                 sx={{ textTransform: "capitalize" }}
               >
-                Save Changes
+                {loading ? "Saving..." : "Save Changes"}
               </Typography>
             </Button>
 
             <Button
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);
+                setUpdate({
+                  name: user?.name,
+                  email: user?.email,
+                  phone: user?.phone,
+                });
+              }}
               variant="outlined"
               sx={{
                 width: "365px",
