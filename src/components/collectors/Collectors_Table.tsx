@@ -13,6 +13,8 @@ import { BsBan } from "react-icons/bs";
 
 import api from "../../utils/axiosInstance";
 import DayAndTime from "../../utils/DayAndTime";
+import BanUser from "../modals/BanUser";
+import DeleteUser from "../modals/DeleteUser";
 
 interface Collectors {
   _id: string;
@@ -147,7 +149,21 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
                   <TableCell sx={{ px: 4 }}>
                     <DayAndTime date={row.createdAt} />
                   </TableCell>
-                  <TableCell sx={{ px: 4 }}>...</TableCell>
+                  <TableCell sx={{ px: 4 }}>
+                    <div className="flex gap-6">
+                      <BanUser
+                        action={row.status === "active" ? "Ban" : "Unban"}
+                        user="collector"
+                        _id={row._id}
+                        refresh={collectorsList}
+                      />
+                      <DeleteUser
+                        user="collector"
+                        _id={row._id}
+                        refresh={collectorsList}
+                      />
+                    </div>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (

@@ -38,7 +38,6 @@ const Admins = () => {
     try {
       const response = await api.get("/api/admin/admin-mgt/list");
 
-      console.log(response.data.data);
       setAdmins(response.data.data.admins);
     } catch (error) {
       console.error(error);
