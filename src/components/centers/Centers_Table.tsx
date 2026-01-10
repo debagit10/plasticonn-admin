@@ -11,6 +11,8 @@ import {
 import React from "react";
 
 import { BsBan } from "react-icons/bs";
+import BanUser from "../modals/BanUser";
+import DeleteUser from "../modals/DeleteUser";
 
 interface Centers {
   _id: string;
@@ -41,9 +43,15 @@ interface TableProps {
   search: string;
   filter: string;
   centers: Centers[];
+  refresh: () => void;
 }
 
-const Centers_Table: React.FC<TableProps> = ({ search, filter, centers }) => {
+const Centers_Table: React.FC<TableProps> = ({
+  search,
+  filter,
+  centers,
+  refresh,
+}) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
 
@@ -211,7 +219,21 @@ const Centers_Table: React.FC<TableProps> = ({ search, filter, centers }) => {
                     </Typography>
                   </TableCell>
 
-                  <TableCell sx={{ px: 4 }}>...</TableCell>
+                  <TableCell sx={{ px: 4 }}>
+                    <div className="flex gap-6">
+                      <BanUser
+                        action={row.status === "active" ? "Ban" : "Unban"}
+                        user="center"
+                        _id={row._id}
+                        refresh={refresh}
+                      />
+                      <DeleteUser
+                        user="center"
+                        _id={row._id}
+                        refresh={refresh}
+                      />
+                    </div>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (

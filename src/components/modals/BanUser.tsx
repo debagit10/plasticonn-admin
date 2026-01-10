@@ -26,6 +26,7 @@ const BanUser: React.FC<Ban> = ({ action, user, _id, refresh }) => {
   const { toast, showToast, closeToast } = useToast();
 
   const submit = async () => {
+    console.log(_id);
     setLoading(true);
 
     try {

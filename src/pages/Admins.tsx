@@ -16,6 +16,8 @@ import { IoSearchOutline } from "react-icons/io5";
 import Pages from "../container/Pages";
 import Add_Admin from "../components/admins/Add_Admin";
 import api from "../utils/axiosInstance";
+import BanUser from "../components/modals/BanUser";
+import DeleteUser from "../components/modals/DeleteUser";
 
 interface Admins {
   _id: string;
@@ -258,7 +260,21 @@ const Admins = () => {
                         </Typography>
                       </TableCell>
 
-                      <TableCell sx={{ px: 4 }}>...</TableCell>
+                      <TableCell sx={{ px: 4 }}>
+                        <div className="flex gap-6">
+                          <BanUser
+                            action={row.status === "active" ? "Ban" : "Unban"}
+                            user="admin"
+                            _id={row._id}
+                            refresh={adminList}
+                          />
+                          <DeleteUser
+                            user="admin"
+                            _id={row._id}
+                            refresh={adminList}
+                          />
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (

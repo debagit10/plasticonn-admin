@@ -156,7 +156,12 @@ const Centers = () => {
           </TextField>
         </div>
 
-        <Centers_Table search={search} filter={value} centers={centers} />
+        <Centers_Table
+          search={search}
+          filter={value}
+          centers={centers}
+          refresh={centersList}
+        />
       </div>
     </Pages>
   );
