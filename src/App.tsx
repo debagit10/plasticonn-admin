@@ -9,7 +9,7 @@ const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Analytics = React.lazy(() => import("./pages/Analytics"));
 const Centers = React.lazy(() => import("./pages/Centers"));
 const Collectors = React.lazy(() => import("./pages/Collectors"));
-const Notifications = React.lazy(() => import("./pages/Notifications"));
+const Activity_logs = React.lazy(() => import("./pages/Activity_logs"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Admins = React.lazy(() => import("./pages/Admins"));
 const SignIn = React.lazy(() => import("./pages/auth/SignIn"));
@@ -40,7 +40,7 @@ function App() {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/centers" element={<Centers />} />
         <Route path="/collectors" element={<Collectors />} />
-        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/activity_logs" element={<Activity_logs />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/admins" element={<Admins />} />
       </Routes>

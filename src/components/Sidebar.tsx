@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { SlLocationPin } from "react-icons/sl";
 import { LuChartSpline } from "react-icons/lu";
-// import { IoNotificationsOutline } from "react-icons/io5";
+import { LuClock } from "react-icons/lu";
 import { IoSettingsOutline } from "react-icons/io5";
 import { LuUsersRound } from "react-icons/lu";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
@@ -14,11 +14,11 @@ const Sidebar = () => {
     { icon: <LuUsersRound />, name: "Collectors", link: "/collectors" },
     { icon: <SlLocationPin />, name: "Centers", link: "/centers" },
     { icon: <LuChartSpline />, name: "Data & Analytics", link: "/analytics" },
-    // {
-    //   icon: <IoNotificationsOutline />,
-    //   name: "Notifications",
-    //   link: "/notifications",
-    // },
+    {
+      icon: <LuClock />,
+      name: "Activity Logs",
+      link: "/activity_logs",
+    },
     { icon: <MdOutlineAdminPanelSettings />, name: "Admins", link: "/admins" },
     { icon: <IoSettingsOutline />, name: "Settings", link: "/settings" },
   ];
