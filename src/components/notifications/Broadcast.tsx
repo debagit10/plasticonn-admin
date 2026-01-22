@@ -9,12 +9,59 @@ import {
 import { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
+import api from "../../utils/axiosInstance";
+import { useToast } from "../../utils/useToast";
+import Toast from "../../utils/Toast";
 
 const Broadcast = () => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [audience, setAudience] = useState("all");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
+  const { toast, showToast, closeToast } = useToast();
+
+  const submit = async () => {
+    setLoading(true);
+
+    try {
+      const response = await api.post("/api/admin/bulk-email", {
+        audience,
+        subject,
+        message,
+      });
+
+      setLoading(false);
+
+      console.log(response.data);
+
+      showToast("Emails sent successfully", "success");
+
+      setTimeout(() => {
+        setOpen(false);
+      }, 2000);
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message;
+      console.log(errMsg);
+
+      showToast(errMsg, "error");
+
+      if (errMsg) {
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <div className="mr-5 mb-6">
+      <Toast
+        open={toast.open}
+        message={toast.message}
+        severity={toast.severity}
+        onClose={closeToast}
+      />
+
       <Button
         onClick={() => setOpen(true)}
         sx={{
@@ -68,8 +115,8 @@ const Broadcast = () => {
               Recipients
             </Typography>
             <TextField
-              //   value={search}
-              //   onChange={(e) => setSearch(e.target.value)}
+              value={audience}
+              onChange={(e) => setAudience(e.target.value)}
               placeholder="e.g Green valley collection center"
               variant="outlined"
               size="small"
@@ -102,9 +149,10 @@ const Broadcast = () => {
                 },
               }}
             >
-              <MenuItem value="All Users">All Users</MenuItem>
-              <MenuItem value="Collectors">Collectors</MenuItem>
-              <MenuItem value="Centers">Centers</MenuItem>
+              <MenuItem value="all">All Users</MenuItem>
+              <MenuItem value="collectors">Collectors</MenuItem>
+              <MenuItem value="centers">Centers</MenuItem>
+              <MenuItem value="admins">Admins</MenuItem>
             </TextField>
           </div>
 
@@ -113,8 +161,8 @@ const Broadcast = () => {
               Subject
             </Typography>
             <TextField
-              //   value={search}
-              //   onChange={(e) => setSearch(e.target.value)}
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
               placeholder="e.g Important Platform Update"
               variant="outlined"
               size="small"
@@ -154,8 +202,8 @@ const Broadcast = () => {
             </Typography>
             <TextField
               //rows={}
-              //   value={search}
-              //   onChange={(e) => setSearch(e.target.value)}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               variant="outlined"
               size="small"
               fullWidth
@@ -202,6 +250,7 @@ const Broadcast = () => {
 
           <div className="flex gap-4 mt-12">
             <Button
+              onClick={submit}
               sx={{
                 width: "365px",
                 height: "48px",
@@ -216,7 +265,7 @@ const Broadcast = () => {
                 fontSize={16}
                 sx={{ textTransform: "capitalize" }}
               >
-                Send Broadcast
+                {loading ? "Sending..." : "Send Broadcast"}
               </Typography>
             </Button>
 
