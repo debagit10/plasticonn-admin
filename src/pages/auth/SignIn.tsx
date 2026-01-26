@@ -12,6 +12,7 @@ import api from "../../utils/axiosInstance";
 import { VscEyeClosed } from "react-icons/vsc";
 import { VscEye } from "react-icons/vsc";
 import { useAuthStore } from "../../utils/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 interface SignInDetails {
   email: string;
@@ -19,6 +20,7 @@ interface SignInDetails {
 }
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -31,7 +33,7 @@ const SignIn = () => {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setDetails((prev) => ({ ...prev, [name]: value }));
@@ -230,16 +232,18 @@ const SignIn = () => {
               </Typography>
             </div>
 
-            <Typography
-              fontWeight={400}
-              fontSize={18}
-              color="#00C281"
-              sx={{
-                "&:hover": { cursor: "pointer", textDecoration: "underline" },
-              }}
-            >
-              Forgot Password?
-            </Typography>
+            <div onClick={() => navigate("/forgot-password")}>
+              <Typography
+                fontWeight={400}
+                fontSize={18}
+                color="#00C281"
+                sx={{
+                  "&:hover": { cursor: "pointer", textDecoration: "underline" },
+                }}
+              >
+                Forgot Password?
+              </Typography>
+            </div>
           </div>
 
           <Button

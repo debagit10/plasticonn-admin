@@ -13,6 +13,7 @@ const Activity_logs = React.lazy(() => import("./pages/Activity_logs"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Admins = React.lazy(() => import("./pages/Admins"));
 const SignIn = React.lazy(() => import("./pages/auth/SignIn"));
+const ForgotPassword = React.lazy(() => import("./pages/auth/ForgotPassword"));
 
 function App() {
   const authLoading = useAuthStore((state) => state.authLoading);
@@ -36,6 +37,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<SignIn />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/centers" element={<Centers />} />
