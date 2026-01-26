@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Typography from "@mui/material/Typography";
 import { Avatar, Badge, Divider } from "@mui/material";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { useAuthStore } from "../utils/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 interface PagesProps {
   children?: React.ReactNode;
@@ -12,7 +13,29 @@ interface PagesProps {
 }
 
 const Pages: React.FC<PagesProps> = ({ children, page, helperText }) => {
-  const { user } = useAuthStore.getState();
+  const { user, clearUser } = useAuthStore.getState();
+
+  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const onLogout = () => {
+    navigate("/");
+    clearUser();
+  };
 
   return (
     <div className="flex h-screen">
@@ -44,8 +67,9 @@ const Pages: React.FC<PagesProps> = ({ children, page, helperText }) => {
               <IoNotificationsOutline size={32} color="#1A1A1AB2" />
             </Badge>
             <Divider orientation="vertical" />
-            <div className="flex gap-3">
-              <div className="">
+
+            <div className="relative flex gap-3 items-center" ref={menuRef}>
+              <div>
                 <Typography color="#1A1A1A" fontSize={16} fontWeight={400}>
                   {user?.name}
                 </Typography>
@@ -53,7 +77,33 @@ const Pages: React.FC<PagesProps> = ({ children, page, helperText }) => {
                   {user?.role || "admin"}
                 </Typography>
               </div>
-              <Avatar />
+
+              {/* Avatar */}
+              <button onClick={() => setOpen((prev) => !prev)}>
+                <Avatar className="cursor-pointer" />
+              </button>
+
+              {/* Dropdown */}
+              {open && (
+                <div className="absolute right-0 top-12 w-40 bg-white rounded-lg shadow-lg border z-10">
+                  <button
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                    onClick={() => {
+                      setOpen(false);
+                      navigate("/settings");
+                    }}
+                  >
+                    Settings
+                  </button>
+
+                  <button
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                    onClick={onLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
