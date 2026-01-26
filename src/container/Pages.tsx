@@ -33,7 +33,7 @@ const Pages: React.FC<PagesProps> = ({ children, page, helperText }) => {
   }, []);
 
   const onLogout = () => {
-    navigate("/");
+    navigate("/", { replace: true });
     clearUser();
   };
 

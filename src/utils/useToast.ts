@@ -19,13 +19,13 @@ export const useToast = () => {
   });
 
   const [redirectAfterToast, setRedirectAfterToast] = useState<string | null>(
-    null
+    null,
   );
 
   const showToast = (
     message: string,
     severity: ToastSeverity = "info",
-    redirectTo?: string
+    redirectTo?: string,
   ) => {
     setToast({ open: true, message, severity });
     if (redirectTo) setRedirectAfterToast(redirectTo);
@@ -35,7 +35,7 @@ export const useToast = () => {
     setToast((prev) => ({ ...prev, open: false }));
 
     if (redirectAfterToast) {
-      navigate(redirectAfterToast);
+      navigate(redirectAfterToast, { replace: true });
       setRedirectAfterToast(null);
     }
   };
