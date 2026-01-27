@@ -6,6 +6,7 @@ import Plastic_Collected from "../components/dashboard/Plastic_Collected";
 import Pages from "../container/Pages";
 import { useEffect, useState } from "react";
 import api from "../utils/axiosInstance";
+import { DownloadModal } from "../components/modals/DownloadModal";
 
 interface Stats {
   co2Saved: number;
@@ -15,6 +16,8 @@ interface Stats {
 
 const Analytics = () => {
   const [stats, setStats] = useState<Stats>();
+  const [open, setOpen] = useState(false);
+
   const getStats = async () => {
     try {
       const response = await api.get("/api/admin/dashboard/analytics");
@@ -47,7 +50,7 @@ const Analytics = () => {
     >
       <div className="flex justify-end mr-5">
         <Button
-          //onClick={() => setOpen(true)}
+          onClick={() => setOpen(true)}
           variant="outlined"
           sx={{
             width: "190px",
@@ -70,6 +73,8 @@ const Analytics = () => {
             Download Report
           </Typography>
         </Button>
+
+        <DownloadModal open={open} onClose={() => setOpen(false)} />
       </div>
 
       <div className="flex px-5 gap-6.5 mt-6">
