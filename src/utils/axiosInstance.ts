@@ -3,7 +3,10 @@ import NProgress from "nprogress";
 import { useAuthStore } from "./useAuthStore";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL_DEV,
+  baseURL:
+    import.meta.env.VITE_NODE_ENV === "production"
+      ? import.meta.env.VITE_BASE_URL_PROD
+      : import.meta.env.VITE_BASE_URL_DEV,
   withCredentials: true,
 });
 
@@ -18,7 +21,7 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Response Interceptor
@@ -36,7 +39,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;
