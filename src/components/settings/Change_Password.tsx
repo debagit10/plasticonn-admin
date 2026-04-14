@@ -52,7 +52,6 @@ const Change_Password = () => {
       }
     } catch (error: any) {
       const errMsg = error?.response?.data?.message;
-      console.log(errMsg);
 
       showToast(errMsg, "error");
 
