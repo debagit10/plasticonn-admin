@@ -4,6 +4,7 @@ import Change_Password from "../components/settings/Change_Password";
 import Edit_Profile from "../components/settings/Edit_Profile";
 import { LuUserRound } from "react-icons/lu";
 import { useAuthStore } from "../utils/useAuthStore";
+import Profile_details from "../components/settings/Profile_details";
 
 const Settings = () => {
   const { user } = useAuthStore.getState();
@@ -37,6 +38,10 @@ const Settings = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="mx-5 mt-6">
+        <Profile_details />
       </div>
     </Pages>
   );

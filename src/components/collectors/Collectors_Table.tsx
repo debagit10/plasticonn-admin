@@ -19,7 +19,8 @@ import DeleteUser from "../modals/DeleteUser";
 interface Collectors {
   _id: string;
   address: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   createdAt: string;
@@ -55,7 +56,8 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
 
   const filteredRows = collectors?.filter((collector) => {
     const matchesSearch =
-      collector.name.toLowerCase().includes(search.toLowerCase()) ||
+      collector.firstName.toLowerCase().includes(search.toLowerCase()) ||
+      collector.firstName.toLowerCase().includes(search.toLowerCase()) ||
       collector.email.toLowerCase().includes(search.toLowerCase());
 
     const matchesFilter = filter === "all" || collector.status === filter;
@@ -65,7 +67,7 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
 
   const paginatedRows = filteredRows?.slice(
     page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
+    page * rowsPerPage + rowsPerPage,
   );
 
   const handleChangePage = (_: unknown, newPage: number) => {
@@ -73,7 +75,7 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -128,7 +130,9 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
                     backgroundColor: "#FAFAFA",
                   }}
                 >
-                  <TableCell sx={{ px: 4 }}>{row.name}</TableCell>
+                  <TableCell sx={{ px: 4 }}>
+                    {`${row.firstName} ${row.lastName}`}
+                  </TableCell>
                   <TableCell sx={{ px: 4 }}>{row.email}</TableCell>
                   <TableCell sx={{ px: 4 }}>
                     <Typography

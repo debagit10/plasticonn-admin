@@ -13,7 +13,7 @@ interface PagesProps {
 }
 
 const Pages: React.FC<PagesProps> = ({ children, page, helperText }) => {
-  const { user, clearUser } = useAuthStore.getState();
+  const { user, clearUser } = useAuthStore();
 
   const navigate = useNavigate();
 

@@ -1,0 +1,176 @@
+import { TextField, Typography } from "@mui/material";
+import { useAuthStore } from "../../utils/useAuthStore";
+
+const Profile_details = () => {
+  const { user } = useAuthStore();
+  console.log(user);
+
+  return (
+    <div className="bg-[#FAFAFA] rounded-[18px] p-9 shadow-[0_2px_6px_#1A1A1A26] flex flex-col gap-4">
+      <div>
+        <Typography fontWeight={400} fontSize={24} color="#1A1A1A">
+          Personal Information
+        </Typography>
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-9">
+        <div>
+          <Typography fontWeight={400} fontSize={18} color="#1A1A1A">
+            First Name
+          </Typography>
+          <TextField
+            value={user?.name}
+            variant="outlined"
+            size="small"
+            fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                height: "40px",
+                borderRadius: "12px",
+                color: "#1A1A1A",
+                backgroundColor: "#1A1A1A0D",
+
+                // focused
+                "&.Mui-focused fieldset": {
+                  borderColor: "#1A1A1A0D",
+                  borderWidth: "0.2px",
+                },
+              },
+
+              // input text
+              "& input": {
+                padding: "10px 12px",
+                fontSize: 14,
+              },
+            }}
+          />
+        </div>
+        <div>
+          <Typography fontWeight={400} fontSize={18} color="#1A1A1A">
+            Last Name
+          </Typography>
+          <TextField
+            value={user?.name}
+            variant="outlined"
+            size="small"
+            fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                height: "40px",
+                borderRadius: "12px",
+                color: "#1A1A1A",
+                backgroundColor: "#1A1A1A0D",
+
+                // focused
+                "&.Mui-focused fieldset": {
+                  borderColor: "#1A1A1A0D",
+                  borderWidth: "0.2px",
+                },
+              },
+
+              // input text
+              "& input": {
+                padding: "10px 12px",
+                fontSize: 14,
+              },
+            }}
+          />
+        </div>
+      </div>
+
+      <div>
+        <Typography fontWeight={400} fontSize={18} color="#1A1A1A">
+          Email Address
+        </Typography>
+        <TextField
+          value={user?.email}
+          variant="outlined"
+          size="small"
+          fullWidth
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              height: "40px",
+              borderRadius: "12px",
+              color: "#1A1A1A",
+              backgroundColor: "#1A1A1A0D",
+
+              // focused
+              "&.Mui-focused fieldset": {
+                borderColor: "#1A1A1A0D",
+                borderWidth: "0.2px",
+              },
+            },
+
+            // input text
+            "& input": {
+              padding: "10px 12px",
+              fontSize: 14,
+            },
+          }}
+        />
+      </div>
+      <div>
+        <Typography fontWeight={400} fontSize={18} color="#1A1A1A">
+          Phone Number
+        </Typography>
+        <TextField
+          value={user?.phone}
+          variant="outlined"
+          size="small"
+          fullWidth
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              height: "40px",
+              borderRadius: "12px",
+              color: "#1A1A1A",
+              backgroundColor: "#1A1A1A0D",
+
+              // focused
+              "&.Mui-focused fieldset": {
+                borderColor: "#1A1A1A0D",
+              },
+            },
+
+            // input text
+            "& input": {
+              padding: "10px 12px",
+              fontSize: 14,
+            },
+          }}
+        />
+      </div>
+      <div>
+        <Typography fontWeight={400} fontSize={18} color="#1A1A1A">
+          Address
+        </Typography>
+        <TextField
+          value={user?.address}
+          size="small"
+          fullWidth
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              height: "40px",
+              borderRadius: "12px",
+              color: "#1A1A1A",
+              backgroundColor: "#1A1A1A0D",
+
+              // focused
+              "&.Mui-focused fieldset": {
+                borderColor: "#1A1A1A0D",
+                borderWidth: "0.2px",
+              },
+            },
+
+            // input text
+            "& input": {
+              padding: "10px 12px",
+              fontSize: 14,
+            },
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Profile_details;

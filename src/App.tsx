@@ -16,22 +16,22 @@ const SignIn = React.lazy(() => import("./pages/auth/SignIn"));
 const ForgotPassword = React.lazy(() => import("./pages/auth/ForgotPassword"));
 
 function App() {
-  const authLoading = useAuthStore((state) => state.authLoading);
-  const setUser = useAuthStore((state) => state.setUser);
-  const clearUser = useAuthStore((state) => state.clearUser);
+  // const authLoading = useAuthStore((state) => state.authLoading);
+  // const setUser = useAuthStore((state) => state.setUser);
+  // const clearUser = useAuthStore((state) => state.clearUser);
 
-  useEffect(() => {
-    api
-      .get(`/api/admin/profile`)
-      .then((res) => setUser(res.data.data.admin))
-      .catch(() => clearUser());
-  }, []);
+  // useEffect(() => {
+  //   api
+  //     .get(`/api/admin/profile`)
+  //     .then((res) => setUser(res.data.data.admin))
+  //     .catch(() => clearUser());
+  // }, []);
 
-  usePageLoader();
+  // usePageLoader();
 
-  if (authLoading) {
-    return "Loading...";
-  }
+  // if (authLoading) {
+  //   return "Loading...";
+  // }
 
   return (
     <>

@@ -25,6 +25,7 @@ interface Centers {
   status: string;
   capacity: string;
   type: string;
+  formal: string;
   materialsAccepted: [string];
   contactEmail: string;
   contactPerson: string;
@@ -85,7 +86,7 @@ const Centers_Table: React.FC<TableProps> = ({
 
   const paginatedRows = filteredRows?.slice(
     page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
+    page * rowsPerPage + rowsPerPage,
   );
 
   const handleChangePage = (_: unknown, newPage: number) => {
@@ -93,7 +94,7 @@ const Centers_Table: React.FC<TableProps> = ({
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);

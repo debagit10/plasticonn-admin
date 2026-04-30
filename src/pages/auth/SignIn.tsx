@@ -43,7 +43,7 @@ const SignIn = () => {
     return Object.values(signindetails).every((value) => value.trim() !== "");
   };
 
-  const { setUser } = useAuthStore.getState();
+  const { setUser } = useAuthStore();
 
   const signin = async () => {
     setLoading(true);
@@ -55,10 +55,13 @@ const SignIn = () => {
       return;
     }
 
+    console.log(signindetails);
+
     try {
       const response = await api.post("/api/admin/login", signindetails);
 
       setLoading(false);
+      console.log(response.data.data.admin);
 
       setUser(response.data.data.admin);
 

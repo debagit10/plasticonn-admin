@@ -14,9 +14,11 @@ import api from "../../utils/axiosInstance";
 import Toast from "../../utils/Toast";
 
 interface AdminDetails {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   role: string;
+  address: string;
 }
 
 const Add_Admin = ({ onSuccess }: { onSuccess: () => void }) => {
@@ -26,13 +28,15 @@ const Add_Admin = ({ onSuccess }: { onSuccess: () => void }) => {
   const { toast, showToast, closeToast } = useToast();
 
   const [adminDetails, setAdminDetails] = useState<AdminDetails>({
+    firstName: "",
+    lastName: "",
     email: "",
-    name: "",
     role: "",
+    address: "",
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setAdminDetails((prev) => ({ ...prev, [name]: value }));
@@ -136,11 +140,51 @@ const Add_Admin = ({ onSuccess }: { onSuccess: () => void }) => {
 
           <div>
             <Typography fontWeight={400} fontSize={18} color="#1A1A1A">
-              Name
+              Last Name
             </Typography>
             <TextField
               name="name"
-              value={adminDetails.name}
+              value={adminDetails.lastName}
+              onChange={handleChange}
+              variant="outlined"
+              size="small"
+              fullWidth
+              sx={{
+                // overall height
+                "& .MuiOutlinedInput-root": {
+                  height: "40px",
+                  borderRadius: "12px",
+                  backgroundColor: "#FAFAFA",
+
+                  // default border
+                  "& fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+
+                  // focused
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+                },
+
+                // input text
+                "& input": {
+                  padding: "10px 12px",
+                  fontSize: 14,
+                },
+              }}
+            />
+          </div>
+
+          <div>
+            <Typography fontWeight={400} fontSize={18} color="#1A1A1A">
+              First Name
+            </Typography>
+            <TextField
+              name="name"
+              value={adminDetails.firstName}
               onChange={handleChange}
               variant="outlined"
               size="small"
@@ -181,6 +225,46 @@ const Add_Admin = ({ onSuccess }: { onSuccess: () => void }) => {
             <TextField
               name="email"
               value={adminDetails.email}
+              onChange={handleChange}
+              variant="outlined"
+              size="small"
+              fullWidth
+              sx={{
+                // overall height
+                "& .MuiOutlinedInput-root": {
+                  height: "40px",
+                  borderRadius: "12px",
+                  backgroundColor: "#FAFAFA",
+
+                  // default border
+                  "& fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+
+                  // focused
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+                },
+
+                // input text
+                "& input": {
+                  padding: "10px 12px",
+                  fontSize: 14,
+                },
+              }}
+            />
+          </div>
+
+          <div>
+            <Typography fontWeight={400} fontSize={18} color="#1A1A1A">
+              Address
+            </Typography>
+            <TextField
+              name="email"
+              value={adminDetails.address}
               onChange={handleChange}
               variant="outlined"
               size="small"

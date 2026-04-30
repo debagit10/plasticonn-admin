@@ -19,6 +19,7 @@ interface Centers {
   status: string;
   capacity: string;
   type: string;
+  formal: boolean;
   materialsAccepted: [string];
   contactEmail: string;
   contactPerson: string;
