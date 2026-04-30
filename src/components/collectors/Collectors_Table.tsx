@@ -7,6 +7,7 @@ import {
   TableBody,
   TablePagination,
   Typography,
+  Avatar,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { BsBan } from "react-icons/bs";
@@ -15,6 +16,8 @@ import api from "../../utils/axiosInstance";
 import DayAndTime from "../../utils/DayAndTime";
 import BanUser from "../modals/BanUser";
 import DeleteUser from "../modals/DeleteUser";
+import { getInitials } from "../../utils/getInitials";
+import View_Collector from "./View_Collector";
 
 interface Collectors {
   _id: string;
@@ -25,6 +28,10 @@ interface Collectors {
   phone: string;
   createdAt: string;
   status: string;
+  image: {
+    url: string;
+    public_id: string;
+  };
 }
 
 interface TableProps {
@@ -35,6 +42,10 @@ interface TableProps {
 const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
+  const [view, setView] = useState(false);
+  const [selectedCollector, setSelectedCollector] = useState<Collectors | null>(
+    null,
+  );
 
   const [collectors, setCollectors] = useState<Collectors[]>();
 
@@ -122,6 +133,10 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
             {paginatedRows?.length ? (
               paginatedRows.map((row) => (
                 <TableRow
+                  onClick={() => {
+                    setSelectedCollector(row);
+                    setView(true);
+                  }}
                   key={row._id}
                   sx={{
                     fontWeight: 400,
@@ -131,7 +146,21 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
                   }}
                 >
                   <TableCell sx={{ px: 4 }}>
-                    {`${row.firstName} ${row.lastName}`}
+                    <div className="flex gap-3 items-center">
+                      <Avatar
+                        src={row?.image?.url || undefined}
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          background:
+                            "linear-gradient(to bottom, #005C3D, #00C281)",
+                        }}
+                      >
+                        {!row?.image?.url &&
+                          getInitials(`${row?.firstName} ${row?.lastName}`)}
+                      </Avatar>
+                      {`${row.firstName} ${row.lastName}`}
+                    </div>
                   </TableCell>
                   <TableCell sx={{ px: 4 }}>{row.email}</TableCell>
                   <TableCell sx={{ px: 4 }}>
@@ -180,6 +209,14 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {selectedCollector && (
+        <View_Collector
+          collector={selectedCollector}
+          view={view}
+          setView={setView}
+        />
+      )}
 
       <TablePagination
         rowsPerPageOptions={[10, 25]}

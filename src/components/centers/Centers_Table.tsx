@@ -8,11 +8,12 @@ import {
   TablePagination,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 import { BsBan } from "react-icons/bs";
 import BanUser from "../modals/BanUser";
 import DeleteUser from "../modals/DeleteUser";
+import View_Center from "./View_Center";
 
 interface Centers {
   _id: string;
@@ -25,7 +26,7 @@ interface Centers {
   status: string;
   capacity: string;
   type: string;
-  formal: string;
+  formal: boolean;
   materialsAccepted: [string];
   contactEmail: string;
   contactPerson: string;
@@ -33,6 +34,16 @@ interface Centers {
   gps: { coordinates: GPS };
   operatingHours: string;
   verified: boolean;
+  image: {
+    url: string;
+    public_id: string;
+  };
+  documents: [
+    {
+      url: string;
+      public_id: string;
+    },
+  ];
 }
 
 interface GPS {
@@ -55,6 +66,8 @@ const Centers_Table: React.FC<TableProps> = ({
 }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
+  const [view, setView] = useState(false);
+  const [selectedCenter, setSelectedCenter] = useState<Centers | null>(null);
 
   const head = ["Name", "Type", "Address", "Verified", "Status", "Actions"];
 
@@ -141,6 +154,10 @@ const Centers_Table: React.FC<TableProps> = ({
             {paginatedRows?.length ? (
               paginatedRows.map((row) => (
                 <TableRow
+                  onClick={() => {
+                    setSelectedCenter(row);
+                    setView(true);
+                  }}
                   key={row._id}
                   sx={{
                     fontWeight: 400,
@@ -247,6 +264,10 @@ const Centers_Table: React.FC<TableProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
+
+      {selectedCenter && (
+        <View_Center center={selectedCenter} view={view} setView={setView} />
+      )}
 
       <TablePagination
         rowsPerPageOptions={[10, 25]}

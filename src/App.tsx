@@ -1,8 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { useAuthStore } from "./utils/useAuthStore";
-import api from "./utils/axiosInstance";
-import usePageLoader from "./utils/pageLoader";
 import "nprogress/nprogress.css";
 
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));

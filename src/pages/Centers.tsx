@@ -27,6 +27,16 @@ interface Centers {
   gps: { coordinates: GPS };
   operatingHours: string;
   verified: boolean;
+  image: {
+    url: string;
+    public_id: string;
+  };
+  documents: [
+    {
+      url: string;
+      public_id: string;
+    },
+  ];
 }
 
 interface GPS {
