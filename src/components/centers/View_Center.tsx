@@ -23,6 +23,7 @@ interface Center {
   status: string;
   capacity: string;
   type: string;
+  centerType: string;
   formal: boolean;
   materialsAccepted: [string];
   contactEmail: string;

@@ -7,6 +7,7 @@ import {
   TableBody,
   TablePagination,
   Typography,
+  Chip,
 } from "@mui/material";
 import React, { useState } from "react";
 
@@ -26,6 +27,7 @@ interface Centers {
   status: string;
   capacity: string;
   type: string;
+  centerType: string;
   formal: boolean;
   materialsAccepted: [string];
   contactEmail: string;
@@ -64,6 +66,7 @@ const Centers_Table: React.FC<TableProps> = ({
   centers,
   refresh,
 }) => {
+  console.log(centers);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
   const [view, setView] = useState(false);
@@ -71,20 +74,20 @@ const Centers_Table: React.FC<TableProps> = ({
 
   const head = ["Name", "Type", "Address", "Verified", "Status", "Actions"];
 
-  const TYPE_STYLES: Record<string, { bg: string; color: string }> = {
-    "Informal Collection Center": {
-      bg: "#FFF7ED",
-      color: "#C2410C",
-    },
-    "Formal Collection": {
-      bg: "#EFF6FF",
-      color: "#1D4ED8",
-    },
-    "Recycling Center": {
-      bg: "#ECFDF5",
-      color: "#047857",
-    },
-  };
+  // const TYPE_STYLES: Record<string, { bg: string; color: string }> = {
+  //   "Informal Collection Center": {
+  //     bg: "#FFF7ED",
+  //     color: "#C2410C",
+  //   },
+  //   "Formal Collection": {
+  //     bg: "#EFF6FF",
+  //     color: "#1D4ED8",
+  //   },
+  //   "Recycling Center": {
+  //     bg: "#ECFDF5",
+  //     color: "#047857",
+  //   },
+  // };
 
   const filteredRows = centers?.filter((center) => {
     const matchesSearch =
@@ -92,7 +95,10 @@ const Centers_Table: React.FC<TableProps> = ({
       center.address.toLowerCase().includes(search.toLowerCase());
 
     const matchesFilter =
-      filter === "all" || center.status === filter || center.type === filter;
+      filter === "all" ||
+      center.status === filter ||
+      center.type === filter ||
+      center.centerType === filter;
 
     return matchesSearch && matchesFilter;
   });
@@ -152,29 +158,41 @@ const Centers_Table: React.FC<TableProps> = ({
 
           <TableBody>
             {paginatedRows?.length ? (
-              paginatedRows.map((row) => (
-                <TableRow
-                  onClick={() => {
-                    setSelectedCenter(row);
-                    setView(true);
-                  }}
-                  key={row._id}
-                  sx={{
-                    fontWeight: 400,
-                    fontSize: 18,
-                    color: "#1A1A1A",
-                    backgroundColor: "#FAFAFA",
-                  }}
-                >
-                  <TableCell sx={{ px: 4 }}>
-                    <Typography>
-                      {row.name.charAt(0).toUpperCase() +
-                        row.name.slice(1).toLowerCase()}
-                    </Typography>
-                  </TableCell>
+              paginatedRows.map((row) => {
+                const chipConfig =
+                  row?.centerType === "recycling"
+                    ? { label: "Recycling center", color: "#00C281" }
+                    : row.centerType === "collection" && row?.formal
+                      ? { label: "Formal Collection", color: "#2563eb" }
+                      : row.centerType === "collection" && !row?.formal
+                        ? {
+                            label: "Informal Collection",
+                            color: "#f59e0b",
+                          }
+                        : { label: "", bg: "" };
+                return (
+                  <TableRow
+                    onClick={() => {
+                      setSelectedCenter(row);
+                      setView(true);
+                    }}
+                    key={row._id}
+                    sx={{
+                      fontWeight: 400,
+                      fontSize: 18,
+                      color: "#1A1A1A",
+                      backgroundColor: "#FAFAFA",
+                    }}
+                  >
+                    <TableCell sx={{ px: 4 }}>
+                      <Typography>
+                        {row.name.charAt(0).toUpperCase() +
+                          row.name.slice(1).toLowerCase()}
+                      </Typography>
+                    </TableCell>
 
-                  <TableCell sx={{ px: 4 }}>
-                    <Typography
+                    <TableCell sx={{ px: 4 }}>
+                      {/* <Typography
                       sx={{
                         display: "inline-flex",
                         alignItems: "center",
@@ -189,71 +207,83 @@ const Centers_Table: React.FC<TableProps> = ({
                       }}
                     >
                       {row.type}
-                    </Typography>
-                  </TableCell>
+                    </Typography> */}
 
-                  <TableCell sx={{ px: 4 }}>
-                    <Typography>
-                      {row.address.charAt(0).toUpperCase() +
-                        row.address.slice(1).toLowerCase()}
-                    </Typography>
-                  </TableCell>
-
-                  <TableCell sx={{ px: 4 }}>
-                    <Typography
-                      sx={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        px: 2,
-                        py: 0.5,
-                        borderRadius: "999px",
-                        fontSize: 14,
-                        fontWeight: 500,
-                        textTransform: "capitalize",
-
-                        backgroundColor: row.verified ? "#ECFDF5" : "#FEF2F2",
-                        color: row.verified ? "#047857" : "#B91C1C",
-                      }}
-                    >
-                      {row.verified ? "Verified" : "Unverified"}
-                    </Typography>
-                  </TableCell>
-
-                  <TableCell sx={{ px: 4 }}>
-                    <Typography
-                      display="flex"
-                      sx={{ textTransform: "capitalize" }}
-                      color={row.status === "active" ? "#00C281" : "#E11D48"}
-                    >
-                      <span className="mr-3">
-                        {row.status === "active" ? (
-                          <img src="/active.png" alt="active" />
-                        ) : (
-                          <BsBan size={20} color="#E11D48" />
-                        )}
-                      </span>{" "}
-                      {row.status}
-                    </Typography>
-                  </TableCell>
-
-                  <TableCell sx={{ px: 4 }}>
-                    <div className="flex gap-6">
-                      <BanUser
-                        action={row.status === "active" ? "Ban" : "Unban"}
-                        user="center"
-                        _id={row._id}
-                        refresh={refresh}
+                      <Chip
+                        label={chipConfig.label}
+                        variant="outlined"
+                        sx={{
+                          //width: "50%",
+                          borderColor: chipConfig.color,
+                          color: chipConfig.color,
+                          fontWeight: 500,
+                        }}
                       />
-                      <DeleteUser
-                        user="center"
-                        _id={row._id}
-                        refresh={refresh}
-                      />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+                    </TableCell>
+
+                    <TableCell sx={{ px: 4 }}>
+                      <Typography>
+                        {row.address.charAt(0).toUpperCase() +
+                          row.address.slice(1).toLowerCase()}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell sx={{ px: 4 }}>
+                      <Typography
+                        sx={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          px: 2,
+                          py: 0.5,
+                          borderRadius: "999px",
+                          fontSize: 14,
+                          fontWeight: 500,
+                          textTransform: "capitalize",
+
+                          backgroundColor: row.verified ? "#ECFDF5" : "#FEF2F2",
+                          color: row.verified ? "#047857" : "#B91C1C",
+                        }}
+                      >
+                        {row.verified ? "Verified" : "Unverified"}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell sx={{ px: 4 }}>
+                      <Typography
+                        display="flex"
+                        sx={{ textTransform: "capitalize" }}
+                        color={row.status === "active" ? "#00C281" : "#E11D48"}
+                      >
+                        <span className="mr-3">
+                          {row.status === "active" ? (
+                            <img src="/active.png" alt="active" />
+                          ) : (
+                            <BsBan size={20} color="#E11D48" />
+                          )}
+                        </span>{" "}
+                        {row.status}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell sx={{ px: 4 }}>
+                      <div className="flex gap-6">
+                        <BanUser
+                          action={row.status === "active" ? "Ban" : "Unban"}
+                          user="center"
+                          _id={row._id}
+                          refresh={refresh}
+                        />
+                        <DeleteUser
+                          user="center"
+                          _id={row._id}
+                          refresh={refresh}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell colSpan={5} align="center">

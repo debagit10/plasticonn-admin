@@ -44,8 +44,8 @@ const Plastic_Collected: React.FC<Prop> = ({
               growth && growth < 0
                 ? "#E11D48" // red
                 : growth && growth > 0
-                ? "#00C281" // green
-                : "#1A1A1A" // neutral
+                  ? "#00C281" // green
+                  : "#1A1A1A" // neutral
             }
           >
             {`${growth}% vs last month`}

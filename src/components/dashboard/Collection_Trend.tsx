@@ -32,6 +32,7 @@ const Collection_Trend: React.FC<Graph> = ({ width, height }) => {
       const response = await api.get("/api/admin/dashboard/graph");
 
       setStats(response.data.data.data);
+      console.log(response.data.data.data);
     } catch (error) {
       console.error(error);
     }

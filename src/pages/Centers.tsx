@@ -19,6 +19,7 @@ interface Centers {
   status: string;
   capacity: string;
   type: string;
+  centerType: string;
   formal: boolean;
   materialsAccepted: [string];
   contactEmail: string;
@@ -157,13 +158,8 @@ const Centers = () => {
             <MenuItem value="all">All</MenuItem>
             <MenuItem value="suspended">Suspended</MenuItem>
             <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="Informal Collection Center">
-              Informal Collection Center
-            </MenuItem>
-            <MenuItem value="Formal Collection">
-              Formal Collection Center
-            </MenuItem>
-            <MenuItem value="Recycling Center">Recycling Center</MenuItem>
+            <MenuItem value="collection">Collection Center</MenuItem>
+            <MenuItem value="recycling">Recycling Center</MenuItem>
           </TextField>
         </div>
 
