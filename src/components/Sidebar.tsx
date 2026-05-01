@@ -7,12 +7,14 @@ import { LuClock } from "react-icons/lu";
 import { IoSettingsOutline } from "react-icons/io5";
 import { LuUsersRound } from "react-icons/lu";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { MdWeb } from "react-icons/md";
 
 const Sidebar = () => {
   const sideMenuList = [
     { icon: <LuLayoutDashboard />, name: "Dashboard", link: "/dashboard" },
     { icon: <LuUsersRound />, name: "Collectors", link: "/collectors" },
     { icon: <SlLocationPin />, name: "Centers", link: "/centers" },
+    { icon: <MdWeb />, name: "Website", link: "/website" },
     { icon: <LuChartSpline />, name: "Data & Analytics", link: "/analytics" },
     {
       icon: <LuClock />,

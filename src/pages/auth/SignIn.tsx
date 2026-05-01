@@ -55,8 +55,6 @@ const SignIn = () => {
       return;
     }
 
-    console.log(signindetails);
-
     try {
       const response = await api.post("/api/admin/login", signindetails);
 
