@@ -20,10 +20,53 @@ const Website = () => {
       <div className=" px-5 mt-6">
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="Website tabs">
-              <Tab label="Blogs" value="1" />
-              <Tab label="Gallery" value="2" />
-              <Tab label="Partners" value="3" />
+            <TabList
+              sx={{
+                "& .MuiTabs-indicator": {
+                  backgroundColor: "#00C281",
+                  height: "2px",
+                  borderRadius: "2px",
+                },
+              }}
+              onChange={handleChange}
+              aria-label="Website tabs"
+            >
+              <Tab
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#1A1A1A80",
+                  "&.Mui-selected": {
+                    color: "#00C281",
+                    fontWeight: 500,
+                  },
+                }}
+                label="Blogs"
+                value="1"
+              />
+              <Tab
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#1A1A1A80",
+                  "&.Mui-selected": {
+                    color: "#00C281",
+                    fontWeight: 500,
+                  },
+                }}
+                label="Gallery"
+                value="2"
+              />
+              <Tab
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#1A1A1A80",
+                  "&.Mui-selected": {
+                    color: "#00C281",
+                    fontWeight: 500,
+                  },
+                }}
+                label="Partners"
+                value="3"
+              />
             </TabList>
           </Box>
           <TabPanel value="1">

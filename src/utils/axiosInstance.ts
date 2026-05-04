@@ -1,5 +1,5 @@
 import axios from "axios";
-import NProgress from "nprogress";
+//import NProgress from "nprogress";
 import { useAuthStore } from "./useAuthStore";
 
 const api = axios.create({
@@ -13,7 +13,7 @@ const api = axios.create({
 // Request Interceptor
 api.interceptors.request.use(
   (config) => {
-    NProgress.start();
+    //NProgress.start();
 
     if (!(config.data instanceof FormData)) {
       config.headers["Content-Type"] = "application/json";
@@ -27,11 +27,11 @@ api.interceptors.request.use(
 // Response Interceptor
 api.interceptors.response.use(
   (response) => {
-    NProgress.done();
+    //NProgress.done();
     return response;
   },
   (error) => {
-    NProgress.done();
+    //NProgress.done();
 
     if (error.response?.status === 401) {
       useAuthStore.getState().clearUser();

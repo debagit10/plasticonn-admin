@@ -133,19 +133,26 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
             {paginatedRows?.length ? (
               paginatedRows.map((row) => (
                 <TableRow
-                  onClick={() => {
-                    setSelectedCollector(row);
-                    setView(true);
-                  }}
                   key={row._id}
                   sx={{
                     fontWeight: 400,
                     fontSize: 18,
                     color: "#1A1A1A",
                     backgroundColor: "#FAFAFA",
+                    cursor: "pointer",
+
+                    "&:hover": {
+                      backgroundColor: "#F0F0F0",
+                    },
                   }}
                 >
-                  <TableCell sx={{ px: 4 }}>
+                  <TableCell
+                    sx={{ px: 4 }}
+                    onClick={() => {
+                      setSelectedCollector(row);
+                      setView(true);
+                    }}
+                  >
                     <div className="flex gap-3 items-center">
                       <Avatar
                         src={row?.image?.url || undefined}
@@ -162,8 +169,22 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
                       {`${row.firstName} ${row.lastName}`}
                     </div>
                   </TableCell>
-                  <TableCell sx={{ px: 4 }}>{row.email}</TableCell>
-                  <TableCell sx={{ px: 4 }}>
+                  <TableCell
+                    onClick={() => {
+                      setSelectedCollector(row);
+                      setView(true);
+                    }}
+                    sx={{ px: 4 }}
+                  >
+                    {row.email}
+                  </TableCell>
+                  <TableCell
+                    onClick={() => {
+                      setSelectedCollector(row);
+                      setView(true);
+                    }}
+                    sx={{ px: 4 }}
+                  >
                     <Typography
                       display="flex"
                       sx={{ textTransform: "capitalize" }}
@@ -179,7 +200,13 @@ const Collectors_Table: React.FC<TableProps> = ({ search, filter }) => {
                       {row.status}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={{ px: 4 }}>
+                  <TableCell
+                    onClick={() => {
+                      setSelectedCollector(row);
+                      setView(true);
+                    }}
+                    sx={{ px: 4 }}
+                  >
                     <DayAndTime date={row.createdAt} />
                   </TableCell>
                   <TableCell sx={{ px: 4 }}>

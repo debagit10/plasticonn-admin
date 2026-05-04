@@ -74,21 +74,6 @@ const Centers_Table: React.FC<TableProps> = ({
 
   const head = ["Name", "Type", "Address", "Verified", "Status", "Actions"];
 
-  // const TYPE_STYLES: Record<string, { bg: string; color: string }> = {
-  //   "Informal Collection Center": {
-  //     bg: "#FFF7ED",
-  //     color: "#C2410C",
-  //   },
-  //   "Formal Collection": {
-  //     bg: "#EFF6FF",
-  //     color: "#1D4ED8",
-  //   },
-  //   "Recycling Center": {
-  //     bg: "#ECFDF5",
-  //     color: "#047857",
-  //   },
-  // };
-
   const filteredRows = centers?.filter((center) => {
     const matchesSearch =
       center.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -172,43 +157,39 @@ const Centers_Table: React.FC<TableProps> = ({
                         : { label: "", bg: "" };
                 return (
                   <TableRow
-                    onClick={() => {
-                      setSelectedCenter(row);
-                      setView(true);
-                    }}
                     key={row._id}
                     sx={{
                       fontWeight: 400,
                       fontSize: 18,
                       color: "#1A1A1A",
                       backgroundColor: "#FAFAFA",
+                      cursor: "pointer",
+
+                      "&:hover": {
+                        backgroundColor: "#F0F0F0",
+                      },
                     }}
                   >
-                    <TableCell sx={{ px: 4 }}>
+                    <TableCell
+                      sx={{ px: 4 }}
+                      onClick={() => {
+                        setSelectedCenter(row);
+                        setView(true);
+                      }}
+                    >
                       <Typography>
                         {row.name.charAt(0).toUpperCase() +
                           row.name.slice(1).toLowerCase()}
                       </Typography>
                     </TableCell>
 
-                    <TableCell sx={{ px: 4 }}>
-                      {/* <Typography
-                      sx={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        px: 2,
-                        py: 0.5,
-                        borderRadius: "999px",
-                        fontSize: 14,
-                        fontWeight: 500,
-
-                        backgroundColor: TYPE_STYLES[row.type]?.bg ?? "#F3F4F6",
-                        color: TYPE_STYLES[row.type]?.color ?? "#374151",
+                    <TableCell
+                      sx={{ px: 4 }}
+                      onClick={() => {
+                        setSelectedCenter(row);
+                        setView(true);
                       }}
                     >
-                      {row.type}
-                    </Typography> */}
-
                       <Chip
                         label={chipConfig.label}
                         variant="outlined"
@@ -221,14 +202,26 @@ const Centers_Table: React.FC<TableProps> = ({
                       />
                     </TableCell>
 
-                    <TableCell sx={{ px: 4 }}>
+                    <TableCell
+                      sx={{ px: 4 }}
+                      onClick={() => {
+                        setSelectedCenter(row);
+                        setView(true);
+                      }}
+                    >
                       <Typography>
                         {row.address.charAt(0).toUpperCase() +
                           row.address.slice(1).toLowerCase()}
                       </Typography>
                     </TableCell>
 
-                    <TableCell sx={{ px: 4 }}>
+                    <TableCell
+                      sx={{ px: 4 }}
+                      onClick={() => {
+                        setSelectedCenter(row);
+                        setView(true);
+                      }}
+                    >
                       <Typography
                         sx={{
                           display: "inline-flex",
@@ -249,7 +242,13 @@ const Centers_Table: React.FC<TableProps> = ({
                       </Typography>
                     </TableCell>
 
-                    <TableCell sx={{ px: 4 }}>
+                    <TableCell
+                      sx={{ px: 4 }}
+                      onClick={() => {
+                        setSelectedCenter(row);
+                        setView(true);
+                      }}
+                    >
                       <Typography
                         display="flex"
                         sx={{ textTransform: "capitalize" }}
