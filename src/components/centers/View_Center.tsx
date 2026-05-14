@@ -5,6 +5,8 @@ import {
   Button,
   Avatar,
   Divider,
+  MenuItem,
+  TextField,
 } from "@mui/material";
 import { getInitials } from "../../utils/getInitials";
 import { useState } from "react";
@@ -60,6 +62,7 @@ const View_Center = ({
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [formal, setFormal] = useState("");
 
   const { toast, showToast, closeToast } = useToast();
 
@@ -69,6 +72,7 @@ const View_Center = ({
     try {
       const response = await api.put(
         `api/admin/center-mgt/verify/${center._id}`,
+        { formal },
       );
 
       if (response.data.status === 200) {
@@ -157,26 +161,63 @@ const View_Center = ({
             </Typography>
 
             {!center.verified && (
-              <Button
-                disabled={loading}
-                onClick={verify}
-                sx={{
-                  width: "365px",
-                  height: "48px",
-                  padding: "12px",
-                  borderRadius: "12px",
-                  backgroundColor: loading ? "white" : "#00C281",
-                  color: loading ? "grey" : "white",
-                }}
-              >
-                <Typography
-                  fontWeight={400}
-                  fontSize={16}
-                  sx={{ textTransform: "capitalize" }}
+              <>
+                <Button
+                  disabled={loading}
+                  onClick={verify}
+                  sx={{
+                    width: "365px",
+                    height: "48px",
+                    padding: "12px",
+                    borderRadius: "12px",
+                    backgroundColor: loading ? "white" : "#00C281",
+                    color: loading ? "grey" : "white",
+                  }}
                 >
-                  {loading ? "Verifying..." : "Verify"}
-                </Typography>
-              </Button>
+                  <Typography
+                    fontWeight={400}
+                    fontSize={16}
+                    sx={{ textTransform: "capitalize" }}
+                  >
+                    {loading ? "Verifying..." : "Verify"}
+                  </Typography>
+                </Button>
+
+                <div>
+                  <Typography
+                    fontWeight={400}
+                    fontSize={{ xs: 15, sm: 16, md: 18 }}
+                    color="#1A1A1A"
+                  >
+                    Center Type
+                  </Typography>
+                  <TextField
+                    select
+                    name="role"
+                    value={formal}
+                    onChange={(e) => setFormal(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        height: "40px",
+                        borderRadius: "12px",
+                        backgroundColor: "#00C2810D",
+                        "& fieldset": { borderColor: "#00C2810D" },
+                        "&.Mui-focused fieldset": { borderColor: "#00C2810D" },
+                      },
+                      "& .MuiSelect-select": {
+                        padding: "10px 12px",
+                        fontSize: 14,
+                      },
+                    }}
+                  >
+                    <MenuItem value="true">Formal Center</MenuItem>
+                    <MenuItem value="false">Informal Center</MenuItem>
+                  </TextField>
+                </div>
+              </>
             )}
           </div>
 
