@@ -15,14 +15,18 @@ import {
 import { useEffect, useState } from "react";
 import api from "../../utils/axiosInstance";
 import { IoMdAdd } from "react-icons/io";
+import { useToast } from "../../utils/useToast";
+import Toast from "../../utils/Toast";
+import DayAndTime from "../../utils/DayAndTime";
 
 type Blog = {
   _id: string;
   title: string;
-  by: string;
+  author: string;
   status: "draft" | "published";
   timestamp: string;
   content?: string;
+  createdAt: string;
 };
 
 const Blog = () => {
@@ -31,15 +35,35 @@ const Blog = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
+
+  const { toast, showToast, closeToast } = useToast();
 
   const [form, setForm] = useState({
     title: "",
-    by: "",
+    author: "",
     content: "",
+    role: "",
   });
 
+  const formData = new FormData();
+
+  Object.entries(form).forEach(([key, value]) => {
+    if (value === null || value === undefined) return;
+
+    if (Array.isArray(value)) {
+      formData.append(key, JSON.stringify(value));
+    } else {
+      formData.append(key, value as string);
+    }
+  });
+
+  if (image) {
+    formData.append("image", image);
+  }
+
   const fetchBlogs = async () => {
-    const res = await api.get("/api/blogs");
+    const res = await api.get("/api/blog");
     setBlogs(res.data.data);
   };
 
@@ -48,21 +72,77 @@ const Blog = () => {
   }, []);
 
   const createBlog = async () => {
-    setLoading(true);
-    await api.post("/api/blogs", form);
-    setCreateOpen(false);
-    fetchBlogs();
+    try {
+      console.log(formData);
+      setLoading(true);
+
+      const response = await api.post("/api/blog", formData);
+
+      console.log(response.data);
+
+      if (response.data.status === 201) {
+        showToast(response.data.message, "success");
+        setLoading(false);
+        setTimeout(() => {
+          fetchBlogs();
+          setCreateOpen(false);
+        }, 2000);
+      }
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message;
+      console.log(errMsg);
+
+      showToast(errMsg, "error");
+
+      if (errMsg) {
+        setLoading(false);
+      }
+    }
   };
 
   const publishBlog = async (id: string) => {
-    await api.patch(`/api/blogs/publish/${id}`);
-    fetchBlogs();
+    try {
+      await api.patch(`/api/blog/${id}`);
+
+      showToast("Blog published", "success");
+      setLoading(false);
+      setTimeout(() => {
+        fetchBlogs();
+        setOpen(false);
+      }, 2000);
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message;
+      console.log(errMsg);
+
+      showToast(errMsg, "error");
+
+      if (errMsg) {
+        setLoading(false);
+      }
+    }
   };
 
   const deleteBlog = async (id: string) => {
-    await api.delete(`/api/blogs/${id}`);
-    fetchBlogs();
-    setOpen(false);
+    try {
+      await api.delete(`/api/blog/${id}`);
+
+      showToast("Blog deleted", "success");
+
+      setLoading(false);
+      setTimeout(() => {
+        fetchBlogs();
+        setOpen(false);
+      }, 2000);
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message;
+      console.log(errMsg);
+
+      showToast(errMsg, "error");
+
+      if (errMsg) {
+        setLoading(false);
+      }
+    }
   };
 
   return (
@@ -110,39 +190,182 @@ const Blog = () => {
               className="cursor-pointer"
             >
               <TableCell>{blog.title}</TableCell>
-              <TableCell>{blog.by}</TableCell>
+              <TableCell>{blog.author}</TableCell>
               <TableCell>
                 <Chip
                   label={blog.status}
                   color={blog.status === "published" ? "success" : "warning"}
                 />
               </TableCell>
-              <TableCell>{new Date(blog.timestamp).toLocaleString()}</TableCell>
+              <TableCell>{<DayAndTime date={blog.createdAt} />}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
       {/* BLOG DETAILS MODAL */}
-      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        fullWidth
+        maxWidth="md"
+        PaperProps={{
+          sx: {
+            paddingY: { xs: "16px", sm: "20px", md: "24px" },
+            paddingX: { xs: "12px", sm: "16px", md: "18px" },
+            borderRadius: "16px",
+            width: "100%",
+            maxWidth: "900px",
+            margin: "12px",
+          },
+        }}
+      >
+        <Toast
+          open={toast.open}
+          message={toast.message}
+          severity={toast.severity}
+          onClose={closeToast}
+        />
         <DialogTitle>{selected?.title}</DialogTitle>
         <DialogContent>
-          <Typography>By: {selected?.by}</Typography>
-          <Typography>Status: {selected?.status}</Typography>
-          <Typography className="mt-3">{selected?.content}</Typography>
+          <div className="flex flex-col gap-4">
+            <TextField
+              label="Author"
+              value={selected?.author || ""}
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  height: "40px",
+                  borderRadius: "12px",
+                  backgroundColor: "#FAFAFA",
 
-          <div className="flex gap-2 mt-4">
+                  // default border
+                  "& fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+
+                  // focused
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+                },
+
+                // input text
+                "& input": {
+                  padding: "10px 12px",
+                  fontSize: 14,
+                },
+              }}
+            />
+
+            <TextField
+              label="Status"
+              value={selected?.status || ""}
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  height: "40px",
+                  borderRadius: "12px",
+                  backgroundColor: "#FAFAFA",
+
+                  // default border
+                  "& fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+
+                  // focused
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+                },
+
+                // input text
+                "& input": {
+                  padding: "10px 12px",
+                  fontSize: 14,
+                },
+              }}
+            />
+
+            <TextField
+              label="Content"
+              value={selected?.content || ""}
+              fullWidth
+              multiline
+              rows={6}
+              InputProps={{
+                readOnly: true,
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "12px",
+                  backgroundColor: "#FAFAFA",
+
+                  // default border
+                  "& fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+
+                  // focused
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#1A1A1A",
+                    borderWidth: "0.2px",
+                  },
+                },
+
+                // input text
+                "& input": {
+                  padding: "10px 12px",
+                  fontSize: 14,
+                },
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 mt-8">
             {selected?.status === "draft" && (
               <Button
-                onClick={() => publishBlog(selected._id)}
-                variant="contained"
+                fullWidth
+                variant="outlined"
+                onClick={() => {
+                  publishBlog(selected!._id);
+                }}
+                sx={{
+                  textTransform: "capitalize",
+                  borderRadius: "10px",
+                  borderColor: "#1A1A1A80",
+                  color: "#1A1A1A",
+                  padding: "10px",
+                }}
               >
                 Publish
               </Button>
             )}
 
-            <Button color="error" onClick={() => deleteBlog(selected!._id)}>
-              Delete
+            <Button
+              fullWidth
+              disabled={loading}
+              onClick={() => deleteBlog(selected!._id)}
+              sx={{
+                textTransform: "capitalize",
+                borderRadius: "10px",
+                backgroundColor: loading ? "#A0A0A0" : "red",
+                color: "white",
+                padding: "10px",
+              }}
+            >
+              {loading ? "Deleting Blog..." : "Delete blog"}
             </Button>
           </div>
         </DialogContent>
@@ -165,6 +388,12 @@ const Blog = () => {
           },
         }}
       >
+        <Toast
+          open={toast.open}
+          message={toast.message}
+          severity={toast.severity}
+          onClose={closeToast}
+        />
         <DialogTitle>Create Blog</DialogTitle>
         <DialogContent className="flex flex-col gap-3">
           <TextField
@@ -207,8 +436,46 @@ const Blog = () => {
           />
           <TextField
             placeholder="Author"
-            onChange={(e) => setForm({ ...form, by: e.target.value })}
+            onChange={(e) => setForm({ ...form, author: e.target.value })}
             name="author"
+            type="text"
+            inputProps={{
+              min: 0,
+              max: 100,
+              step: 1,
+            }}
+            size="small"
+            fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                height: "40px",
+                borderRadius: "12px",
+                backgroundColor: "#FAFAFA",
+
+                // default border
+                "& fieldset": {
+                  borderColor: "#1A1A1A",
+                  borderWidth: "0.2px",
+                },
+
+                // focused
+                "&.Mui-focused fieldset": {
+                  borderColor: "#1A1A1A",
+                  borderWidth: "0.2px",
+                },
+              },
+
+              // input text
+              "& input": {
+                padding: "10px 12px",
+                fontSize: 14,
+              },
+            }}
+          />
+          <TextField
+            placeholder="Role"
+            onChange={(e) => setForm({ ...form, role: e.target.value })}
+            name="role"
             type="text"
             inputProps={{
               min: 0,
@@ -282,11 +549,46 @@ const Blog = () => {
             }}
           />
 
+          <div>
+            <Typography
+              fontWeight={400}
+              fontSize={{ xs: 15, sm: 16, md: 18 }}
+              color="#1A1A1A"
+            >
+              Image
+            </Typography>
+
+            {image && (
+              <div className="flex justify-center my-3">
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="preview"
+                  className="w-36 h-36 object-cover mt-2 rounded-full"
+                />
+              </div>
+            )}
+
+            <input
+              className="h-10 w-full rounded-xl bg-[#00C2810D] px-2.5 py-3 cursor-pointer"
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0])
+                  setImage(e.target.files[0]);
+              }}
+            />
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-3 mt-8">
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => setCreateOpen(false)}
+              onClick={() => {
+                setCreateOpen(false);
+                setImage(null);
+                setLoading(false);
+                setForm({ title: "", author: "", content: "", role: "" });
+              }}
               sx={{
                 textTransform: "capitalize",
                 borderRadius: "10px",
@@ -310,7 +612,7 @@ const Blog = () => {
                 padding: "10px",
               }}
             >
-              {loading ? "Creating Blog..." : "Publish"}
+              {loading ? "Adding Blog..." : "Add blog"}
             </Button>
           </div>
         </DialogContent>
